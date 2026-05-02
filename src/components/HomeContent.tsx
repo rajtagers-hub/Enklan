@@ -57,15 +57,15 @@ export default function HomeContent() {
       </aside>
 
       {/* NAVIGATION (Hamburger & Logo) */}
-      <nav className="fixed top-0 left-0 right-0 h-24 flex items-center justify-between px-6 md:px-10 z-40 bg-linear-to-b from-black/50 to-transparent">
+      <nav className="fixed top-0 left-0 right-0 h-24 flex items-center justify-between px-6 md:px-10 z-40 bg-linear-to-b from-black/80 to-transparent backdrop-blur-sm md:backdrop-blur-none">
         <div className="flex items-center gap-6">
            <button 
-             className="p-4 hover:bg-white/5 rounded-2xl transition-all border border-white/5 group"
+             className="p-4 hover:bg-white/5 rounded-2xl transition-all border border-white/5 group hidden md:block"
              onClick={() => setIsMenuOpen(true)}
            >
               <Menu className="w-6 h-6 text-white group-hover:scale-110 transition-transform" />
            </button>
-           <Logo />
+           <Logo className="scale-90 md:scale-100" />
         </div>
         <div className="flex items-center gap-4">
            <SecretCoin />
@@ -218,19 +218,37 @@ export default function HomeContent() {
         </section>
 
         {/* CONTACT SECTION */}
-        <section id="contact" className="py-32 px-6 md:px-10 max-w-7xl mx-auto border-t border-white/5 bg-radial from-blue-800/5 to-transparent">
+        <section id="contact" className="py-32 px-6 md:px-10 max-w-7xl mx-auto border-t border-white/5 bg-radial from-blue-800/10 to-transparent">
            <div className="text-center space-y-12">
-              <h2 className="text-3xl sm:text-5xl md:text-8xl font-black italic uppercase tracking-tighter px-4">Gati për të bashkëpunuar?</h2>
+              <h2 className="text-4xl sm:text-5xl md:text-8xl font-black italic uppercase tracking-tighter px-4 leading-none">Gati për të bashkëpunuar?</h2>
               <div className="flex flex-wrap justify-center gap-8">
                  <button 
                    onClick={() => setIsContactOpen(true)}
-                   className="bg-white text-black px-16 py-6 rounded-full font-black uppercase italic tracking-[0.2em] hover:bg-blue-800 hover:text-white transition-all shadow-2xl"
+                   className="bg-white text-black px-12 md:px-16 py-5 md:py-6 rounded-full font-black uppercase italic tracking-[0.2em] hover:bg-blue-800 hover:text-white transition-all shadow-2xl"
                  >
                     Na Kontaktoni
                  </button>
               </div>
            </div>
         </section>
+      </div>
+
+      {/* MOBILE BOTTOM DOCK */}
+      <div className="fixed bottom-6 left-6 right-6 z-50 md:hidden">
+         <div className="glass-panel bg-black/60 backdrop-blur-2xl border border-white/10 rounded-[2rem] px-8 py-4 flex items-center justify-between shadow-2xl shadow-blue-900/20">
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="p-3 text-zinc-500 hover:text-white transition-colors">
+               <HomeIcon size={24} />
+            </button>
+            <a href={`${content.settings.socials.whatsapp}`} target="_blank" className="p-4 bg-green-500/10 text-green-500 rounded-2xl border border-green-500/20">
+               <MessageCircle size={24} />
+            </a>
+            <a href={`tel:${content.settings.phone}`} className="p-3 text-zinc-500 hover:text-white transition-colors">
+               <Phone size={24} />
+            </a>
+            <button onClick={() => setIsMenuOpen(true)} className="p-3 text-zinc-500 hover:text-white transition-colors">
+               <Menu size={24} />
+            </button>
+         </div>
       </div>
 
       {/* FOOTER */}
