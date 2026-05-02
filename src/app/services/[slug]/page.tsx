@@ -38,22 +38,22 @@ export default function ServicePage() {
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
       
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 h-24 flex items-center justify-between px-10 z-40 bg-black/50 backdrop-blur-md border-b border-white/5">
+      <nav className="fixed top-0 left-0 right-0 h-24 flex items-center justify-between px-6 md:px-10 z-40 bg-black/80 md:bg-black/50 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center gap-6">
            <button 
              onClick={() => router.push("/")}
-             className="p-3 hover:bg-white/5 rounded-xl transition-all border border-white/5 group flex items-center gap-2"
+             className="p-2 md:p-3 hover:bg-white/5 rounded-xl transition-all border border-white/5 group flex items-center gap-2"
            >
               <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform text-zinc-500" />
-              <span className="text-xs font-bold uppercase tracking-widest hidden sm:block text-zinc-500">Homepage</span>
+              <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest hidden sm:block text-zinc-500">Homepage</span>
            </button>
-           <Logo />
+           <Logo className="scale-75 md:scale-100 origin-left" />
         </div>
         <div className="flex items-center gap-4">
            <SecretCoin />
            <button 
              onClick={() => setIsContactOpen(true)}
-             className="bg-white text-black px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-blue-800 hover:text-white transition-all shadow-lg shadow-white/5"
+             className="bg-white text-black px-4 md:px-6 py-2 md:py-2.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-blue-800 hover:text-white transition-all shadow-lg shadow-white/5"
            >
              Na Kontaktoni
            </button>
@@ -61,25 +61,27 @@ export default function ServicePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-40 pb-20 px-10 max-w-6xl mx-auto">
+      <section className="pt-32 md:pt-40 pb-10 md:pb-20 px-6 md:px-10 max-w-6xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row gap-12 items-start"
+          className="flex flex-col md:flex-row gap-8 md:gap-12 items-center md:items-start text-center md:text-left"
         >
-          <div className="w-24 h-24 rounded-3xl bg-blue-800/10 flex items-center justify-center text-blue-500 border border-blue-500/20 shrink-0 shadow-2xl shadow-blue-800/10">
-            {data.icon === "Zap" && <Zap size={48} />}
-            {data.icon === "Sun" && <Sun size={48} />}
-            {data.icon === "HomeIcon" && <HomeIcon size={48} />}
-            {data.icon === "Settings" && <Settings size={48} />}
-            {data.icon === "Code" && <Code size={48} />}
-            {data.icon === "FileText" && <FileText size={48} />}
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-[2rem] md:rounded-3xl bg-blue-800/10 flex items-center justify-center text-blue-500 border border-blue-500/20 shrink-0 shadow-2xl shadow-blue-800/10">
+            <div className="scale-75 md:scale-100">
+              {data.icon === "Zap" && <Zap size={48} />}
+              {data.icon === "Sun" && <Sun size={48} />}
+              {data.icon === "HomeIcon" && <HomeIcon size={48} />}
+              {data.icon === "Settings" && <Settings size={48} />}
+              {data.icon === "Code" && <Code size={48} />}
+              {data.icon === "FileText" && <FileText size={48} />}
+            </div>
           </div>
-          <div className="space-y-6">
-            <h1 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter leading-none text-white">
+          <div className="space-y-4 md:space-y-6">
+            <h1 className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter leading-none text-white px-2 md:px-0">
               {data.title}
             </h1>
-            <p className="text-xl text-zinc-400 font-medium italic">
+            <p className="text-lg md:text-xl text-zinc-400 font-medium italic max-w-lg mx-auto md:mx-0">
               {data.desc}
             </p>
           </div>
@@ -87,7 +89,7 @@ export default function ServicePage() {
       </section>
 
       {/* Content Grid */}
-      <section className="pb-32 px-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-20">
+      <section className="pb-32 px-6 md:px-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -96,17 +98,17 @@ export default function ServicePage() {
         >
           {data.subsections && data.subsections.length > 0 ? (
             <>
-              <h2 className="text-2xl font-black italic uppercase tracking-tight border-l-4 border-blue-800 pl-6 text-white">Nën-Kategoritë e Shërbimit</h2>
+              <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tight border-l-4 border-blue-800 pl-6 text-white">Nën-Kategoritë e Shërbimit</h2>
               <div className="space-y-4">
                 {data.subsections.map((sub: any, i: number) => (
                   <div 
                     key={i} 
                     onClick={() => setActiveSubsection(sub)}
-                    className="p-6 rounded-2xl bg-white/5 border border-white/10 cursor-pointer hover:border-blue-500/50 hover:bg-white/10 transition-all group"
+                    className="p-5 md:p-6 rounded-[2rem] bg-white/5 border border-white/10 cursor-pointer hover:border-blue-500/50 hover:bg-white/10 transition-all group"
                   >
-                    <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{sub.title}</h3>
-                    <p className="text-sm text-zinc-400 italic mt-2">{sub.desc}</p>
-                    <div className="mt-4 text-xs font-bold uppercase tracking-widest text-blue-800 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <h3 className="text-base md:text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{sub.title}</h3>
+                    <p className="text-xs md:text-sm text-zinc-400 italic mt-2 line-clamp-2">{sub.desc}</p>
+                    <div className="mt-4 text-[10px] md:text-xs font-bold uppercase tracking-widest text-blue-800 flex items-center gap-2 md:opacity-0 group-hover:opacity-100 transition-opacity">
                       Lexo më shumë <ArrowLeft className="w-4 h-4 rotate-180" />
                     </div>
                   </div>
@@ -115,15 +117,15 @@ export default function ServicePage() {
             </>
           ) : (
             <>
-              <h2 className="text-2xl font-black italic uppercase tracking-tight border-l-4 border-blue-800 pl-6 text-white">Pse të na zgjidhni ne?</h2>
+              <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tight border-l-4 border-blue-800 pl-6 text-white">Pse të na zgjidhni ne?</h2>
               <div className="space-y-4">
-                <div className="flex items-center gap-4 group">
+                <div className="flex items-center gap-4 group bg-white/5 p-4 rounded-2xl border border-white/5">
                   <div className="w-2 h-2 rounded-full bg-blue-800 group-hover:scale-150 transition-transform" />
-                  <span className="text-zinc-300 font-medium italic">Zgjidhje të personalizuara teknike</span>
+                  <span className="text-zinc-300 font-medium italic text-sm md:text-base">Zgjidhje të personalizuara teknike</span>
                 </div>
-                <div className="flex items-center gap-4 group">
+                <div className="flex items-center gap-4 group bg-white/5 p-4 rounded-2xl border border-white/5">
                   <div className="w-2 h-2 rounded-full bg-blue-800 group-hover:scale-150 transition-transform" />
-                  <span className="text-zinc-300 font-medium italic">Standarde europiane të cilësisë</span>
+                  <span className="text-zinc-300 font-medium italic text-sm md:text-base">Standarde europiane të cilësisë</span>
                 </div>
               </div>
             </>
@@ -134,10 +136,10 @@ export default function ServicePage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="glass-panel p-10 space-y-6 bg-white/5 border-white/10"
+          className="glass-panel p-6 md:p-10 space-y-6 bg-white/5 border-white/10"
         >
-          <h2 className="text-2xl font-black italic uppercase tracking-tight">Përshkrimi i Plotë</h2>
-          <p className="text-zinc-400 italic leading-relaxed whitespace-pre-line">
+          <h2 className="text-xl md:text-2xl font-black italic uppercase tracking-tight">Përshkrimi i Plotë</h2>
+          <p className="text-sm md:text-base text-zinc-400 italic leading-relaxed whitespace-pre-line">
             {data.details}
           </p>
         </motion.div>

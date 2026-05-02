@@ -132,14 +132,14 @@ export default function HomeContent() {
         </section>
 
         {/* SERVICES SECTION PREVIEW */}
-        <section id="services" className="py-32 px-10 max-w-7xl mx-auto">
-           <div className="flex justify-between items-end mb-20">
+        <section id="services" className="py-20 md:py-32 px-6 md:px-10 max-w-7xl mx-auto">
+           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 md:mb-20 text-center md:text-left">
               <div className="space-y-2">
                  <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Shërbimet Që Ne Ofrojmë</h2>
                  <p className="text-zinc-500 italic">Zgjidhje moderne për infrastrukturë bashkëkohore.</p>
               </div>
            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                {content.services.map((service: any) => {
                   const Icon = {
                     Zap: <Zap size={32} />,
@@ -163,7 +163,7 @@ export default function HomeContent() {
         </section>
 
         {/* RECENT PROJECTS SLIDER */}
-        <section className="pb-32 overflow-hidden relative max-w-7xl mx-auto px-10">
+        <section className="pb-20 md:pb-32 overflow-hidden relative max-w-7xl mx-auto px-6 md:px-10">
            <div className="flex w-fit cursor-grab active:cursor-grabbing">
              <motion.div 
                className="flex"
@@ -186,23 +186,23 @@ export default function HomeContent() {
         </section>
 
         {/* ABOUT SECTION */}
-        <section id="about" className="py-32 px-10 max-w-7xl mx-auto border-t border-white/5">
+        <section id="about" className="py-20 md:py-32 px-6 md:px-10 max-w-7xl mx-auto border-t border-white/5">
            <div className="grid md:grid-cols-2 gap-20 items-center">
-              <div className="space-y-8">
+              <div className="space-y-6 md:space-y-8 text-center md:text-left">
                  <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter leading-none">
                     Ekselencë që<br />nga Viti 2025
                  </h2>
-                 <p className="text-xl text-zinc-400 italic leading-relaxed">
+                 <p className="text-lg md:text-xl text-zinc-400 italic leading-relaxed max-w-lg mx-auto md:mx-0">
                     Enklan Sh.p.k nuk është thjesht një kompani inxhinierike; është një vizion për të ardhmen e energjisë në Shqipëri. Me fokus te teknologjia dhe siguria, ne ndërtojmë sisteme që qëndrojnë.
                  </p>
-                 <div className="flex gap-10 pt-6 border-t border-white/5">
+                 <div className="flex justify-center md:justify-start gap-8 md:gap-10 pt-6 border-t border-white/5">
                     <div>
-                       <div className="text-4xl font-black italic text-blue-500">100%</div>
-                       <div className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Siguri Teknike</div>
+                       <div className="text-3xl md:text-4xl font-black italic text-blue-500">100%</div>
+                       <div className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-zinc-600">Siguri Teknike</div>
                     </div>
                     <div>
-                       <div className="text-4xl font-black italic text-blue-500">24/7</div>
-                       <div className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Mbështetje Teknike</div>
+                       <div className="text-3xl md:text-4xl font-black italic text-blue-500">24/7</div>
+                       <div className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-zinc-600">Mbështetje Teknike</div>
                     </div>
                  </div>
               </div>
@@ -376,14 +376,16 @@ function ServiceCard({ icon, title, desc, slug }: { icon: any, title: string, de
   return (
     <Link href={`/services/${slug}`}>
       <motion.div 
-        className="glass-panel p-10 group hover:border-blue-800/30 transition-all cursor-pointer h-full"
+        className="glass-panel p-8 md:p-10 group hover:border-blue-800/30 transition-all cursor-pointer h-full flex flex-col justify-between"
         whileHover={{ y: -10 }}
       >
-        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-blue-400 mb-8 group-hover:bg-blue-800 group-hover:text-white transition-all duration-500">
-          {icon}
+        <div>
+          <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white/5 flex items-center justify-center text-blue-400 mb-6 md:mb-8 group-hover:bg-blue-800 group-hover:text-white transition-all duration-500">
+            <div className="scale-75 md:scale-100">{icon}</div>
+          </div>
+          <h3 className="text-xl md:text-2xl font-black italic uppercase tracking-tight mb-4">{title}</h3>
+          <p className="text-xs md:text-sm text-zinc-500 italic leading-relaxed">{desc}</p>
         </div>
-        <h3 className="text-2xl font-black italic uppercase tracking-tight mb-4">{title}</h3>
-        <p className="text-sm text-zinc-500 italic leading-relaxed">{desc}</p>
         <div className="mt-8 pt-8 border-t border-white/5 flex justify-end">
            <ArrowRight className="w-5 h-5 text-zinc-700 group-hover:text-blue-800 transition-colors" />
         </div>
