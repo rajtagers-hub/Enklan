@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
 import { UploadCloud, Loader2, X, Image as ImageIcon, Film } from "lucide-react";
+import { upload } from '@vercel/blob/client';
 
 interface MediaUploadProps {
   value: string;
@@ -19,20 +20,12 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
 
     setIsUploading(true);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+      const newBlob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
       });
 
-      const data = await res.json();
-      if (data.success) {
-        onChange(data.url);
-      } else {
-        alert("Gabim gjatë ngarkimit të skedarit.");
-      }
+      onChange(newBlob.url);
     } catch (err) {
       console.error(err);
       alert("Gabim rrjeti gjatë ngarkimit.");
