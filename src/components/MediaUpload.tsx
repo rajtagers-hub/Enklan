@@ -23,6 +23,7 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
       const newBlob = await upload(file.name, file, {
         access: 'public',
         handleUploadUrl: '/api/upload',
+        multipart: true,
       });
 
       onChange(newBlob.url);
