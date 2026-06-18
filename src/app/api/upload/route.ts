@@ -15,9 +15,6 @@ export async function POST(request: Request): Promise<NextResponse> {
           // allowedContentTypes: ['image/jpeg', 'image/png', 'video/mp4'],
         };
       },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        console.log('Upload completed:', blob.url);
-      },
     });
 
     return NextResponse.json(jsonResponse);
