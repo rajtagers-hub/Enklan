@@ -88,21 +88,18 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
       />
       
       {/* Fallback manual URL input */}
-      {!value && (
-         <div className="flex items-center gap-3">
-            <div className="flex-1 border-t border-white/10"></div>
-            <span className="text-[10px] uppercase tracking-widest text-zinc-600">Ose URL</span>
-            <div className="flex-1 border-t border-white/10"></div>
-         </div>
-      )}
-      {!value && (
-         <input 
-            type="text" 
-            placeholder="https://..."
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full bg-black border border-white/10 rounded-xl py-3 px-4 text-xs focus:border-blue-800 transition-all outline-none"
-         />
-      )}
+      <div className="flex items-center gap-3 pt-2">
+         <div className="flex-1 border-t border-white/10"></div>
+         <span className="text-[10px] uppercase tracking-widest text-zinc-600">Ose URL</span>
+         <div className="flex-1 border-t border-white/10"></div>
+      </div>
+      <input 
+         type="text" 
+         placeholder="https://..."
+         value={value || ""}
+         onChange={(e) => onChange(e.target.value)}
+         className="w-full bg-black border border-white/10 rounded-xl py-3 px-4 text-xs focus:border-blue-800 transition-all outline-none"
+      />
     </div>
   );
 }

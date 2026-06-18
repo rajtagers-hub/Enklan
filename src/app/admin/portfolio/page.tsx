@@ -76,7 +76,7 @@ export default function AdminPortfolio() {
                        value={proj.image} 
                        onChange={(url) => {
                          const newP = [...projects];
-                         newP[index].image = url;
+                         newP[index] = { ...newP[index], image: url };
                          setProjects(newP);
                        }} 
                      />
@@ -91,7 +91,7 @@ export default function AdminPortfolio() {
                              value={proj.title}
                              onChange={(e) => {
                                const newP = [...projects];
-                               newP[index].title = e.target.value;
+                               newP[index] = { ...newP[index], title: e.target.value };
                                setProjects(newP);
                              }}
                              className="w-full bg-black border border-white/5 rounded-xl py-3 px-4 text-sm focus:border-blue-800 transition-all outline-none"
@@ -103,12 +103,13 @@ export default function AdminPortfolio() {
                              value={proj.categoryId || ""}
                              onChange={(e) => {
                                const newP = [...projects];
-                               newP[index].categoryId = e.target.value;
-                               
                                const srv = content.services.find((s: any) => s.slug === e.target.value);
-                               newP[index].category = srv ? srv.title : e.target.value;
-                               newP[index].subcategoryId = "";
-                               
+                               newP[index] = {
+                                 ...newP[index],
+                                 categoryId: e.target.value,
+                                 category: srv ? srv.title : e.target.value,
+                                 subcategoryId: ""
+                               };
                                setProjects(newP);
                              }}
                              className="w-full bg-black border border-white/5 rounded-xl py-3 px-4 text-sm focus:border-blue-800 transition-all outline-none appearance-none"
@@ -130,7 +131,7 @@ export default function AdminPortfolio() {
                                    value={proj.subcategoryId || ""}
                                    onChange={(e) => {
                                      const newP = [...projects];
-                                     newP[index].subcategoryId = e.target.value;
+                                     newP[index] = { ...newP[index], subcategoryId: e.target.value };
                                      setProjects(newP);
                                    }}
                                    className="w-full bg-black border border-white/5 rounded-xl py-3 px-4 text-sm focus:border-blue-800 transition-all outline-none appearance-none"
@@ -153,7 +154,7 @@ export default function AdminPortfolio() {
                           value={proj.description}
                           onChange={(e) => {
                             const newP = [...projects];
-                            newP[index].description = e.target.value;
+                            newP[index] = { ...newP[index], description: e.target.value };
                             setProjects(newP);
                           }}
                           className="w-full bg-black border border-white/5 rounded-xl py-3 px-4 text-sm focus:border-blue-800 transition-all outline-none resize-none"
