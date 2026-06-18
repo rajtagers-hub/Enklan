@@ -20,7 +20,11 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
 
     setIsUploading(true);
     try {
-      const newBlob = await upload(file.name, file, {
+      // Sanitize filename to prevent Vercel Blob client from hanging indefinitely
+      // on files with special characters or spaces (common with mobile uploads)
+      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_') || 'upload_file';
+
+      const newBlob = await upload(sanitizedName, file, {
         access: 'public',
         handleUploadUrl: '/api/upload',
         multipart: true,
