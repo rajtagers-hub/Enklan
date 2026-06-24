@@ -11,10 +11,10 @@ export async function POST(request: Request) {
     }
 
     const blob = await put(file.name, file, {
-      access: 'public',
+      access: 'private',
     });
 
-    return NextResponse.json({ success: true, url: blob.url });
+    return NextResponse.json({ success: true, url: blob.downloadUrl });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Upload failed';
     console.error('Upload error:', message);
