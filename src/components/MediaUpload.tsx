@@ -1,7 +1,6 @@
 "use client";
 import { useState, useRef } from "react";
 import { UploadCloud, Loader2, X, Image as ImageIcon, Film } from "lucide-react";
-import { upload } from '@vercel/blob/client';
 
 interface MediaUploadProps {
   value: string;
@@ -20,16 +19,20 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
 
     setIsUploading(true);
     try {
-      // Sanitize filename to prevent Vercel Blob client from hanging indefinitely
-      // on files with special characters or spaces (common with mobile uploads)
-      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_') || 'upload_file';
+      const formData = new FormData();
+      formData.append("file", file);
 
-      const newBlob = await upload(sanitizedName, file, {
-        access: 'public',
-        handleUploadUrl: '/api/upload',
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
       });
 
-      onChange(newBlob.url);
+      const data = await res.json();
+      if (data.success && data.url) {
+        onChange(data.url);
+      } else {
+        alert(data.error || "Gabim gjatë ngarkimit të skedarit.");
+      }
     } catch (err) {
       console.error(err);
       alert("Gabim rrjeti gjatë ngarkimit.");
