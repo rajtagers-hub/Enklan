@@ -13,19 +13,84 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const compressImage = async (file: File): Promise<File> => {
+    if (!file.type.startsWith('image/')) return file;
+    
+    return new Promise((resolve) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        
+        let width = img.width;
+        let height = img.height;
+        const maxDim = 1920;
+        
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve(file);
+        
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        canvas.toBlob((blob) => {
+          if (!blob) return resolve(file);
+          const newFile = new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".jpg", {
+            type: 'image/jpeg',
+            lastModified: Date.now(),
+          });
+          resolve(newFile);
+        }, 'image/jpeg', 0.8);
+      };
+      
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve(file); // kthe file origjinal nëse dështon
+      };
+      
+      img.src = url;
+    });
+  };
+
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
     try {
+      const processedFile = await compressImage(file);
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", processedFile);
 
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
+
+      if (!res.ok) {
+        const text = await res.text();
+        let errMsg = `Gabim serveri: ${res.status}`;
+        try {
+          const json = JSON.parse(text);
+          if (json.error) errMsg = json.error;
+        } catch {
+          console.error("Non-JSON error response:", text);
+        }
+        throw new Error(errMsg);
+      }
 
       const data = await res.json();
       if (data.success && data.url) {
@@ -33,9 +98,9 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
       } else {
         alert(data.error || "Gabim gjatë ngarkimit të skedarit.");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Gabim rrjeti gjatë ngarkimit.");
+      alert(err.message || "Gabim rrjeti gjatë ngarkimit.");
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
