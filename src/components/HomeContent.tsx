@@ -44,7 +44,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: string; suffix?: str
   }, [isInView, numericTarget]);
 
   return (
-    <div ref={ref} className="stat-counter text-5xl md:text-7xl font-bold tracking-tight text-white">
+    <div ref={ref} className="stat-counter text-4xl md:text-6xl font-light tracking-tight text-white">
       {count}{suffix}
     </div>
   );
@@ -78,27 +78,27 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {visibleProjects.map((project: any, i: number) => (
           <motion.div
             key={`${current}-${i}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="group relative aspect-[16/10] rounded-2xl overflow-hidden border border-white/5"
+            className="group relative aspect-[16/10] rounded-[2rem] overflow-hidden"
           >
             <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
               style={{ backgroundImage: `url(${project.image})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-              <div className="text-[10px] font-bold tracking-widest text-blue-400 uppercase mb-2">
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90 transition-opacity duration-500" />
+            <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
+              <div className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase mb-3">
                 {project.category}
               </div>
-              <h3 className="text-xl md:text-2xl font-bold text-white">{project.title}</h3>
+              <h3 className="text-2xl md:text-3xl font-medium text-white mb-2">{project.title}</h3>
               {project.description && (
-                <p className="text-sm text-zinc-400 mt-2 line-clamp-2">{project.description}</p>
+                <p className="text-sm text-zinc-400 line-clamp-2">{project.description}</p>
               )}
             </div>
           </motion.div>
@@ -106,11 +106,11 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-6">
-        <button onClick={prev} className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-colors">
-          <ChevronLeft size={20} className="text-white" />
+      <div className="flex items-center justify-center gap-8 pt-4">
+        <button onClick={prev} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
+          <ChevronLeft size={24} strokeWidth={1.5} />
         </button>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           {Array.from({ length: totalSlides }).map((_, i) => (
             <button
               key={i}
@@ -119,8 +119,8 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
             />
           ))}
         </div>
-        <button onClick={next} className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-colors">
-          <ChevronRight size={20} className="text-white" />
+        <button onClick={next} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
+          <ChevronRight size={24} strokeWidth={1.5} />
         </button>
       </div>
     </div>
@@ -163,13 +163,13 @@ export default function HomeContent() {
       {/* ════════════════════════════════════════════
           HEADER — Transparent → Sticky on scroll
          ════════════════════════════════════════════ */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
-        isScrolled ? "header-solid py-3" : "header-transparent py-5"
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled ? "header-solid py-4" : "header-transparent py-6 md:py-8"
       }`}>
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
           <Logo className={isScrolled ? "scale-90" : ""} />
           
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-10">
             <NavLink href="#services">Shërbimet</NavLink>
             <NavLink href="#about">Rreth Nesh</NavLink>
             <NavLink href="/portfolio">Portofoli</NavLink>
@@ -177,136 +177,126 @@ export default function HomeContent() {
             <NavLink href="#contact">Kontakt</NavLink>
           </div>
 
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-4 md:gap-6">
             <SecretCoin />
             <button
               onClick={() => setIsContactOpen(true)}
-              className="group bg-white text-black px-5 md:px-7 py-2.5 md:py-3 rounded-full text-[10px] md:text-xs font-semibold uppercase tracking-widest hover:bg-blue-700 hover:text-white transition-all flex items-center gap-2"
+              className="group hidden sm:flex items-center gap-3 px-6 py-2.5 rounded-full border border-white/20 text-[11px] font-semibold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all duration-300"
             >
               <span>Na Kontaktoni</span>
-              <ArrowUpRight size={14} className="arrow-icon" />
             </button>
             <button
-              className="p-3 hover:bg-white/5 rounded-xl transition-all lg:hidden"
+              className="p-2 hover:bg-white/5 rounded-full transition-all"
               onClick={() => setIsMenuOpen(true)}
             >
-              <Menu className="w-6 h-6 text-white" />
+              <Menu className="w-6 h-6 text-white" strokeWidth={1.5} />
             </button>
           </div>
         </div>
       </nav>
 
       {/* ════════════════════════════════════════════
-          HERO — Full-screen with background image
+          HERO — Elegant Full-screen
          ════════════════════════════════════════════ */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
+        {/* Subtle Background */}
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url(https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&q=80&w=1920)" }}
         />
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-[#050505]/80 backdrop-blur-[2px]" />
         
         {/* Hero Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-10">
+        <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 md:px-10 mt-20">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
+            className="max-w-4xl"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight">
-              <span className="text-zinc-300">Mirësevini në</span>{" "}
-              <span className="text-white font-extrabold">ENKLAN</span>
-              <span className="text-zinc-300">,</span>
-              <br />
-              <span className="text-zinc-300">lider në fushën e</span>{" "}
-              <span className="text-white">inxhinierisë elektrike.</span>
+            <div className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-8 flex items-center gap-4">
+              <span className="w-8 h-px bg-zinc-600" />
+              Inxhinieri & Siguri Elektrike
+            </div>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-medium leading-[1.1] tracking-tight text-white mb-8">
+              Përsosje në çdo detaj të <br className="hidden md:block" />
+              <span className="text-zinc-500">infrastrukturës elektrike.</span>
             </h1>
+            <div className="flex items-center gap-6">
+              <button 
+                onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
+                className="group flex items-center gap-4 px-8 py-4 rounded-full bg-white text-black text-xs font-semibold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors"
+              >
+                Zbuloni Shërbimet
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
           </motion.div>
         </div>
-
-        {/* Scroll-down arrow */}
-        <motion.a
-          href="#intro"
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 p-4 rounded-full border border-white/20 hover:border-white/50 transition-colors"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <svg className="w-5 h-5 text-white" viewBox="0 0 9.8 9.8" fill="none" stroke="currentColor" strokeWidth="1">
-            <path d="m.4 .4 4.5 4.5 4.5-4.5" />
-          </svg>
-        </motion.a>
       </section>
 
       {/* ════════════════════════════════════════════
-          INTRO SECTION — 3-column layout (Vega style)
+          INTRO SECTION — Clean 2-column Layout
          ════════════════════════════════════════════ */}
-      <section id="intro" className="relative">
-        <div className="grid grid-cols-1 lg:grid-cols-3">
-          {/* Text Column */}
-          <div className="bg-[#111] p-10 md:p-16 lg:p-20 flex flex-col justify-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="space-y-6"
+      <section id="intro" className="py-32 md:py-40 px-6 md:px-10">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
+            className="space-y-10"
+          >
+            <h2 className="text-3xl md:text-5xl font-medium leading-[1.2] tracking-tight text-white">
+              Ne projektojmë dhe ndërtojmë sisteme energjetike për një të ardhme më të qëndrueshme.
+            </h2>
+            <p className="text-lg text-zinc-400 leading-relaxed font-light">
+              Nga instalimet komplekse industriale tek sistemet inteligjente të shtëpive dhe parqet fotovoltaike. 
+              Ekspertiza jonë garanton siguri maksimale dhe efiçencë energjetike të pashoqe.
+            </p>
+            <Link
+              href="/#about"
+              className="group inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:text-zinc-400 transition-colors"
             >
-              <h2 className="text-3xl md:text-5xl font-bold leading-tight tracking-tight text-white">
-                Ndërtojmë të Ardhmen me Energji të Qëndrueshme.
-              </h2>
-              <p className="text-zinc-400 leading-relaxed">
-                Nga instalimet elektrike te panelet diellore. Bashkohuni me ne në revolucionin e energjisë së pastër.
-              </p>
-              <Link
-                href="/#about"
-                className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-widest text-white border border-white/20 rounded-full px-8 py-4 hover:bg-white hover:text-black transition-all"
-              >
-                Mëso Më Shumë
-                <ArrowUpRight size={16} className="arrow-icon" />
-              </Link>
-            </motion.div>
-          </div>
+              Lexoni rrugëtimin tonë
+              <ArrowUpRight size={16} className="arrow-icon" />
+            </Link>
+          </motion.div>
 
-          {/* Image Card 1 */}
-          <div className="relative h-64 lg:h-auto overflow-hidden group cursor-pointer">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
+            className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-[2rem] overflow-hidden"
+          >
             <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: "url(https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=800)" }}
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: "url(https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=1200)" }}
             />
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
-            <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8">
-              <h3 className="text-xl md:text-2xl font-bold text-white">Smart Home</h3>
-            </div>
-          </div>
-
-          {/* Image Card 2 */}
-          <div className="relative h-64 lg:h-auto overflow-hidden group cursor-pointer">
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-              style={{ backgroundImage: "url(https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=800)" }}
-            />
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
-            <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8">
-              <h3 className="text-xl md:text-2xl font-bold text-white">Panele Diellore</h3>
-            </div>
-          </div>
+            <div className="absolute inset-0 bg-black/10" />
+          </motion.div>
         </div>
       </section>
 
       {/* ════════════════════════════════════════════
-          SERVICES — Expanding Accordion Cards
+          SERVICES — Refined Accordion Cards
          ════════════════════════════════════════════ */}
-      <section id="services" className="py-20 md:py-32 px-6 md:px-10">
+      <section id="services" className="py-20 md:py-32 px-6 md:px-10 bg-[#0a0a0a]">
         <div className="max-w-[1400px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-12 md:mb-16"
+            className="mb-16 md:mb-24"
           >
-            <h2 className="text-3xl md:text-6xl font-bold tracking-tight text-white mb-4">Shërbimet Tona</h2>
-            <p className="text-zinc-500 text-lg max-w-xl">Zgjidhje moderne për infrastrukturë bashkëkohore.</p>
+            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-500 mb-6 flex items-center gap-4">
+              <span className="w-8 h-px bg-zinc-700" />
+              Fushat e Ekspertizës
+            </div>
+            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white max-w-2xl">
+              Zgjidhje teknike për kërkesat më të larta të inxhinierisë.
+            </h2>
           </motion.div>
 
           <div className="accordion-cards">
@@ -325,27 +315,32 @@ export default function HomeContent() {
                 
                 {/* Collapsed Label */}
                 <div className="card-label">
-                  <div className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 mb-4">
                     0{index + 1}
                   </div>
-                  <h3 className="text-lg md:text-xl font-bold text-white">{service.title}</h3>
+                  <h3 className="text-lg font-medium text-zinc-300 writing-vertical-lr rotate-180 hidden md:block tracking-wide">
+                    {service.title}
+                  </h3>
+                  <h3 className="text-lg font-medium text-zinc-300 md:hidden">
+                    {service.title}
+                  </h3>
                 </div>
 
                 {/* Expanded Content */}
                 <div className="card-content">
-                  <div className="space-y-4">
-                    <div className="text-xs font-bold uppercase tracking-widest text-blue-400">
+                  <div className="max-w-md">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4">
                       0{index + 1}
                     </div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-white">{service.title}</h3>
-                    <p className="text-zinc-300 text-sm leading-relaxed max-w-md">
+                    <h3 className="text-3xl md:text-4xl font-medium text-white mb-6">{service.title}</h3>
+                    <p className="text-zinc-400 text-sm leading-relaxed mb-8 font-light">
                       {service.desc}
                     </p>
                     <Link
                       href={`/services/${service.slug}`}
-                      className="inline-flex items-center gap-2 text-white text-sm font-semibold uppercase tracking-widest hover:text-blue-400 transition-colors pt-2"
+                      className="group inline-flex items-center justify-center w-12 h-12 rounded-full border border-white/20 hover:border-white text-white transition-all"
                     >
-                      <ArrowUpRight size={20} className="arrow-icon" />
+                      <ArrowUpRight size={18} strokeWidth={1.5} className="arrow-icon" />
                     </Link>
                   </div>
                 </div>
@@ -356,16 +351,16 @@ export default function HomeContent() {
       </section>
 
       {/* ════════════════════════════════════════════
-          STATS — Animated Counters
+          STATS — Minimalist layout
          ════════════════════════════════════════════ */}
-      <section className="py-20 md:py-28 bg-[#111] border-y border-white/5">
+      <section className="py-24 md:py-32 border-y border-white/5">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-8 md:divide-x divide-white/5">
             {[
-              { value: "100", suffix: "%", label: "Siguri Teknike" },
-              { value: "24", suffix: "/7", label: "Mbështetje Teknike" },
-              { value: "50", suffix: "+", label: "Projekte të Realizuara" },
-              { value: "2025", suffix: "", label: "Viti i Themelimit" },
+              { value: "100", suffix: "%", label: "Standard Sigurie" },
+              { value: "24", suffix: "/7", label: "Monitorim Teknik" },
+              { value: "50", suffix: "+", label: "Projekte Globale" },
+              { value: "2025", suffix: "", label: "Themeluar" },
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -373,10 +368,10 @@ export default function HomeContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="text-center md:text-left"
+                className="flex flex-col items-center justify-center text-center px-4"
               >
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                <div className="text-xs font-semibold uppercase tracking-widest text-zinc-500 mt-3">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 mt-4">
                   {stat.label}
                 </div>
               </motion.div>
@@ -386,60 +381,31 @@ export default function HomeContent() {
       </section>
 
       {/* ════════════════════════════════════════════
-          SCROLLING MARQUEE BANNER
+          ABOUT SECTION — Cleaner execution
          ════════════════════════════════════════════ */}
-      <section className="py-10 md:py-14 bg-blue-700 overflow-hidden">
-        <div className="marquee-container">
-          <div className="marquee-content">
-            {[...Array(6)].map((_, i) => (
-              <span key={i} className="text-2xl md:text-4xl font-bold text-white/90 uppercase tracking-wider mx-8 md:mx-16 whitespace-nowrap">
-                Inxhinieri Elektrike &nbsp;•&nbsp; Panele Diellore &nbsp;•&nbsp; Smart Home &nbsp;•&nbsp; Mirëmbajtje &nbsp;•&nbsp;
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════
-          ABOUT SECTION
-         ════════════════════════════════════════════ */}
-      <section id="about" className="py-20 md:py-32 px-6 md:px-10">
-        <div className="max-w-[1400px] mx-auto grid md:grid-cols-2 gap-16 md:gap-20 items-center">
+      <section id="about" className="py-24 md:py-40 px-6 md:px-10">
+        <div className="max-w-[1000px] mx-auto text-center space-y-12">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="space-y-6 md:space-y-8"
           >
-            <div className="text-xs font-bold uppercase tracking-widest text-blue-400">Rreth Nesh</div>
-            <h2 className="text-3xl md:text-6xl font-bold tracking-tight leading-tight text-white">
-              Ekselencë që nga<br />Viti 2025
-            </h2>
-            <p className="text-lg text-zinc-400 leading-relaxed">
-              {content.about.description}
-            </p>
-            <div className="flex gap-10 pt-4 border-t border-white/10">
-              {content.about.stats?.map((stat: any, i: number) => (
-                <div key={i}>
-                  <div className="text-3xl md:text-4xl font-bold text-white">{stat.value}</div>
-                  <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 mt-1">{stat.label}</div>
-                </div>
-              ))}
+            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-500 mb-8">
+              Misioni Ynë
             </div>
+            <h2 className="text-3xl md:text-5xl font-medium tracking-tight leading-[1.3] text-white">
+              Nuk jemi thjesht një kompani inxhinierike; jemi arkitektët e një të ardhmeje me energji inteligjente dhe të sigurt.
+            </h2>
           </motion.div>
-
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative aspect-square rounded-3xl overflow-hidden group"
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: 0.2 }}
           >
-            <img 
-              src={content.about.image}
-              alt="About Enklan" 
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
+            <p className="text-lg text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto">
+              Me një fokus të veçantë në teknologjinë moderne dhe sigurinë absolute, Enklan ndërton sisteme që u rezistojnë kohës dhe kërkesave më të vështira industriale.
+            </p>
           </motion.div>
         </div>
       </section>
@@ -447,169 +413,121 @@ export default function HomeContent() {
       {/* ════════════════════════════════════════════
           PROJECTS CAROUSEL
          ════════════════════════════════════════════ */}
-      <section id="projects" className="py-20 md:py-32 px-6 md:px-10 bg-[#0d0d0d] border-y border-white/5">
+      <section id="projects" className="py-24 md:py-32 px-6 md:px-10 bg-[#0a0a0a] border-t border-white/5">
         <div className="max-w-[1400px] mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6"
-          >
-            <div>
-              <div className="text-xs font-bold uppercase tracking-widest text-blue-400 mb-4">Portofoli</div>
-              <h2 className="text-3xl md:text-6xl font-bold tracking-tight text-white">Projekte të Realizuara</h2>
-            </div>
-            <Link
-              href="/portfolio"
-              className="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-zinc-400 hover:text-white transition-colors"
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
             >
-              Shiko të Gjitha
-              <ArrowUpRight size={16} className="arrow-icon" />
-            </Link>
-          </motion.div>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-500 mb-6 flex items-center gap-4">
+                <span className="w-8 h-px bg-zinc-700" />
+                Portofoli Ynë
+              </div>
+              <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white">Projekte Përfaqësuese</h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <Link
+                href="/portfolio"
+                className="group flex items-center gap-3 px-6 py-3 rounded-full border border-white/10 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-300 hover:text-white hover:border-white/30 transition-all"
+              >
+                Të Gjitha Projektet
+                <ArrowUpRight size={14} className="arrow-icon" />
+              </Link>
+            </motion.div>
+          </div>
 
           <ProjectCarousel projects={content.portfolio || []} />
         </div>
       </section>
 
       {/* ════════════════════════════════════════════
-          CONTACT CTA
+          CONTACT CTA — Elegant
          ════════════════════════════════════════════ */}
-      <section id="contact" className="py-24 md:py-40 px-6 md:px-10 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/10 to-transparent" />
+      <section id="contact" className="py-32 md:py-48 px-6 md:px-10 text-center relative border-y border-white/5">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative z-10 max-w-4xl mx-auto space-y-10"
+          transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
+          className="relative z-10 max-w-3xl mx-auto space-y-12"
         >
-          <h2 className="text-4xl md:text-7xl font-bold tracking-tight text-white">
-            Keni një projekt në mendje?
+          <h2 className="text-4xl md:text-6xl font-medium tracking-tight text-white">
+            Le të ndërtojmë diçka të jashtëzakonshme së bashku.
           </h2>
-          <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-            Jemi gati të japim zgjidhjen më të mirë inxhinierike për nevojat tuaja.
-          </p>
           <button
             onClick={() => setIsContactOpen(true)}
-            className="group bg-white text-black px-12 py-5 rounded-full font-semibold uppercase tracking-widest hover:bg-blue-700 hover:text-white transition-all inline-flex items-center gap-3"
+            className="group px-10 py-5 rounded-full bg-white text-black text-xs font-semibold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors inline-flex items-center gap-4"
           >
-            Na Kontaktoni Sot
-            <ArrowUpRight size={18} className="arrow-icon" />
+            Kontaktoni Ekipin
+            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </button>
         </motion.div>
       </section>
 
       {/* ════════════════════════════════════════════
-          MOBILE BOTTOM DOCK
+          FOOTER — Ultra Clean
          ════════════════════════════════════════════ */}
-      <div className="fixed bottom-6 left-6 right-6 z-50 md:hidden">
-        <div className="bg-black/80 backdrop-blur-2xl border border-white/10 rounded-2xl px-6 py-3 flex items-center justify-between shadow-2xl">
-          <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="p-3 text-zinc-500 hover:text-white transition-colors">
-            <HomeIcon size={22} />
-          </button>
-          <a href={`${content.settings.socials.whatsapp}`} target="_blank" className="p-3 bg-green-500/10 text-green-500 rounded-xl border border-green-500/20">
-            <MessageCircle size={22} />
-          </a>
-          <a href={`tel:${content.settings.phone}`} className="p-3 text-zinc-500 hover:text-white transition-colors">
-            <Phone size={22} />
-          </a>
-          <button onClick={() => setIsMenuOpen(true)} className="p-3 text-zinc-500 hover:text-white transition-colors">
-            <Menu size={22} />
-          </button>
-        </div>
-      </div>
-
-      {/* ════════════════════════════════════════════
-          FOOTER
-         ════════════════════════════════════════════ */}
-      <footer className="bg-[#0a0a0a] border-t border-white/5">
-        {/* Newsletter */}
-        <div className="border-b border-white/5 py-16 md:py-20 px-6 md:px-10">
-          <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-            <div className="space-y-3 text-center md:text-left">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
-                Abonohuni në Newsletter
-              </h2>
-              <p className="text-zinc-500">
-                Merrni lajmet më të fundit rreth projekteve tona.
-              </p>
-            </div>
-            <div className="flex w-full md:w-auto gap-2">
-              <input 
-                type="email" 
-                placeholder="E-mail-i juaj" 
-                className="bg-white/5 border border-white/10 rounded-full py-4 px-6 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-700/50 w-full md:w-72 transition-all"
-              />
-              <button className="bg-white text-black px-8 py-4 rounded-full font-semibold uppercase tracking-widest hover:bg-blue-700 hover:text-white transition-all whitespace-nowrap">
-                Dërgo
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Columns */}
-        <div className="py-16 md:py-20 px-6 md:px-10">
-          <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 md:gap-16">
-            {/* Logo & Info */}
-            <div className="space-y-6 lg:col-span-5">
+      <footer className="bg-[#050505] pt-24 pb-12 px-6 md:px-10">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 mb-24">
+            
+            {/* Brand & Newsletter */}
+            <div className="lg:col-span-6 space-y-12">
               <Logo />
-              <p className="text-sm text-zinc-500 leading-relaxed max-w-sm">
-                Lider në inxhinierinë elektrike dhe zgjidhjet e energjisë së qëndrueshme në Shqipëri.
-              </p>
-              <div className="space-y-3">
-                <ContactLink icon={<Phone size={14} />} href={`tel:${content.settings.phone}`}>{content.settings.phone}</ContactLink>
-                <ContactLink icon={<Mail size={14} />} href={`mailto:${content.settings.email}`}>{content.settings.email}</ContactLink>
-                <div className="flex items-center gap-3 text-zinc-500 text-xs">
-                  <MapPin size={14} className="text-blue-500 shrink-0" />
-                  <span>{content.settings.address}</span>
+              <div className="space-y-6 max-w-md">
+                <h3 className="text-lg text-white font-medium">Qëndroni të informuar.</h3>
+                <div className="flex w-full relative">
+                  <input 
+                    type="email" 
+                    placeholder="E-mail adresa juaj" 
+                    className="w-full bg-transparent border-b border-white/20 py-3 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-white transition-colors"
+                  />
+                  <button className="absolute right-0 top-1/2 -translate-y-1/2 text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 hover:text-white transition-colors">
+                    Abonohu
+                  </button>
                 </div>
               </div>
-              {/* Social Icons */}
-              <div className="flex gap-3 pt-2">
-                <SocialLink href={content.settings.socials.instagram}><Instagram size={18} /></SocialLink>
-                <SocialLink href={content.settings.socials.facebook}><Facebook size={18} /></SocialLink>
-                <SocialLink href={content.settings.socials.linkedin}><Linkedin size={18} /></SocialLink>
-              </div>
             </div>
 
-            {/* Services */}
-            <div className="space-y-5 lg:col-span-3">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-white">Shërbimet</h3>
-              <div className="flex flex-col gap-3">
-                {content.services.map((service: any) => (
-                  <FooterLink key={service.slug} href={`/services/${service.slug}`}>{service.title}</FooterLink>
-                ))}
-              </div>
-            </div>
-
-            {/* Legal */}
-            <div className="space-y-5 lg:col-span-2">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-white">Kushtet Ligjore</h3>
-              <div className="flex flex-col gap-3">
-                <FooterLink href="/terms">Kushtet e Përdorimit</FooterLink>
-                <FooterLink href="/privacy">Politika e Privatësisë</FooterLink>
-                <FooterLink href="/cookies">Politika e Cookies</FooterLink>
-              </div>
-            </div>
-
-            {/* Company */}
-            <div className="space-y-5 lg:col-span-2">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-white">Kompania</h3>
-              <div className="flex flex-col gap-3">
-                <FooterLink href="/#about">Rreth Nesh</FooterLink>
+            {/* Links Columns */}
+            <div className="lg:col-span-2 space-y-6">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Navigimi</h4>
+              <div className="flex flex-col gap-4">
+                <FooterLink href="/#services">Shërbimet</FooterLink>
                 <FooterLink href="/portfolio">Portofoli</FooterLink>
-                <button onClick={() => setIsContactOpen(true)} className="text-sm text-zinc-500 hover:text-white transition-colors text-left">Kontakti</button>
+                <FooterLink href="/#about">Rreth Nesh</FooterLink>
+                <button onClick={() => setIsContactOpen(true)} className="text-sm font-light text-zinc-400 hover:text-white transition-colors text-left w-fit">Kontakti</button>
+              </div>
+            </div>
+
+            <div className="lg:col-span-4 space-y-6">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Kontakt</h4>
+              <div className="flex flex-col gap-4">
+                <a href={`tel:${content.settings.phone}`} className="text-sm font-light text-zinc-400 hover:text-white transition-colors">{content.settings.phone}</a>
+                <a href={`mailto:${content.settings.email}`} className="text-sm font-light text-zinc-400 hover:text-white transition-colors">{content.settings.email}</a>
+                <span className="text-sm font-light text-zinc-400">{content.settings.address}</span>
+              </div>
+              <div className="flex gap-4 pt-4">
+                <SocialLink href={content.settings.socials.instagram}><Instagram size={16} /></SocialLink>
+                <SocialLink href={content.settings.socials.facebook}><Facebook size={16} /></SocialLink>
+                <SocialLink href={content.settings.socials.linkedin}><Linkedin size={16} /></SocialLink>
               </div>
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="max-w-[1400px] mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="text-[10px] font-semibold uppercase tracking-widest text-zinc-600">
-              © 2026 Të gjitha të drejtat të rezervuara nga ENKLAN Sh.p.k
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8 border-t border-white/10">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600">
+              © {new Date().getFullYear()} ENKLAN SH.P.K
             </div>
-            <div className="text-[10px] font-semibold tracking-widest text-zinc-700 uppercase">
-              Powered by Enklan
+            <div className="flex gap-6">
+              <Link href="/terms" className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600 hover:text-white transition-colors">Termat</Link>
+              <Link href="/privacy" className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-600 hover:text-white transition-colors">Privatësia</Link>
             </div>
           </div>
         </div>
@@ -623,7 +541,7 @@ export default function HomeContent() {
    ─────────────────────────────────────────────── */
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="text-sm font-medium text-zinc-300 hover:text-white transition-colors tracking-wide">
+    <Link href={href} className="text-xs font-semibold uppercase tracking-[0.15em] text-zinc-400 hover:text-white transition-colors">
       {children}
     </Link>
   );
@@ -631,18 +549,9 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="text-sm text-zinc-500 hover:text-white transition-colors">
+    <Link href={href} className="text-sm font-light text-zinc-400 hover:text-white transition-colors w-fit">
       {children}
     </Link>
-  );
-}
-
-function ContactLink({ icon, href, children }: { icon: React.ReactNode; href: string; children: React.ReactNode }) {
-  return (
-    <a href={href} className="flex items-center gap-3 text-zinc-500 hover:text-white transition-colors text-xs group">
-      <span className="text-blue-500 shrink-0">{icon}</span>
-      <span>{children}</span>
-    </a>
   );
 }
 
@@ -652,7 +561,7 @@ function SocialLink({ href, children }: { href: string; children: React.ReactNod
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/30 transition-all"
+      className="text-zinc-500 hover:text-white transition-colors"
     >
       {children}
     </a>

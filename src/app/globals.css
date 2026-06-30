@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ffffff;
+  --background: #050505;
+  --foreground: #f0f0f0;
   --accent-gold: #F3C716;
   --accent-teal: #539196;
   --accent-blue: #1e40af;
-  --surface: #141414;
+  --surface: #0f0f0f;
   --surface-light: #1a1a1a;
 }
 
@@ -23,6 +23,8 @@ body {
   font-family: var(--font-sans), 'DM Sans', system-ui, sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Smooth scroll */
@@ -38,12 +40,12 @@ html {
   inset: -100px;
   z-index: -1;
   background: 
-    radial-gradient(circle at 20% 30%, #0a192f 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, #0a192f 0%, transparent 40%),
+    radial-gradient(circle at 20% 30%, #081221 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, #081221 0%, transparent 40%),
     var(--background);
-  filter: blur(60px);
-  opacity: 0.6;
-  animation: galaxy-pulse 25s ease-in-out infinite alternate;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: galaxy-pulse 30s ease-in-out infinite alternate;
   will-change: transform;
   transform: translateZ(0);
 }
@@ -58,14 +60,14 @@ html {
   inset: 0;
   z-index: -1;
   background-image: 
-    radial-gradient(1px 1px at 10% 10%, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1px 1px at 20% 40%, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1px 1px at 40% 20%, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1px 1px at 60% 80%, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.8), transparent);
+    radial-gradient(1px 1px at 10% 10%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 20% 40%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 40% 20%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 60% 80%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.4), transparent);
   background-size: 300px 300px;
-  opacity: 0.3;
-  animation: stardust-float 60s linear infinite;
+  opacity: 0.2;
+  animation: stardust-float 90s linear infinite;
   will-change: background-position;
   transform: translateZ(0);
 }
@@ -80,40 +82,40 @@ html {
    ============================================ */
 .tech-text {
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-weight: 900;
-  font-style: italic;
+  letter-spacing: 0.15em;
+  font-weight: 600;
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
 }
 
 /* ============================================
-   VEGA-STYLE: EXPANDING ACCORDION CARDS
+   REFINED ACCORDION CARDS
    ============================================ */
 .accordion-cards {
   display: flex;
-  gap: 8px;
-  height: 70vh;
-  min-height: 500px;
-  max-height: 700px;
+  gap: 16px;
+  height: 60vh;
+  min-height: 400px;
+  max-height: 600px;
 }
 
 .accordion-card {
   position: relative;
   flex: 1;
-  border-radius: 24px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: flex 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .accordion-card.active {
-  flex: 4;
+  flex: 3;
 }
 
 .accordion-card .card-bg {
@@ -121,18 +123,20 @@ html {
   inset: 0;
   background-size: cover;
   background-position: center;
-  transition: transform 0.6s ease;
+  transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+  filter: grayscale(80%) brightness(0.6);
 }
 
 .accordion-card:hover .card-bg,
 .accordion-card.active .card-bg {
   transform: scale(1.05);
+  filter: grayscale(0%) brightness(0.8);
 }
 
 .accordion-card .card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%);
+  background: linear-gradient(to top, rgba(5,5,5,0.95) 0%, rgba(5,5,5,0.5) 40%, transparent 100%);
 }
 
 .accordion-card .card-label {
@@ -143,6 +147,10 @@ html {
   padding: 32px;
   transform: translateY(0);
   transition: opacity 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .accordion-card .card-content {
@@ -153,7 +161,7 @@ html {
   padding: 40px;
   opacity: 0;
   transform: translateY(20px);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   pointer-events: none;
 }
 
@@ -161,6 +169,7 @@ html {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  transition-delay: 0.1s;
 }
 
 .accordion-card.active .card-label {
@@ -168,28 +177,11 @@ html {
 }
 
 /* ============================================
-   VEGA-STYLE: MARQUEE / SCROLLING BANNER
-   ============================================ */
-.marquee-container {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.marquee-content {
-  display: inline-flex;
-  animation: marquee-scroll 30s linear infinite;
-}
-
-@keyframes marquee-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ============================================
    VEGA-STYLE: STAT COUNTER
    ============================================ */
 .stat-counter {
   font-variant-numeric: tabular-nums;
+  font-weight: 300; /* More elegant weight */
 }
 
 /* ============================================
@@ -197,22 +189,22 @@ html {
    ============================================ */
 .carousel-track {
   display: flex;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .carousel-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .carousel-dot.active {
   background: white;
-  transform: scale(1.3);
+  transform: scale(1.5);
 }
 
 /* ============================================
@@ -220,14 +212,14 @@ html {
    ============================================ */
 .header-transparent {
   background: transparent;
-  transition: all 0.4s ease;
+  transition: all 0.5s ease;
 }
 
 .header-solid {
-  background: rgba(10, 10, 10, 0.95);
-  backdrop-filter: blur(20px);
+  background: rgba(5, 5, 5, 0.85);
+  backdrop-filter: blur(24px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.4s ease;
+  transition: all 0.5s ease;
 }
 
 /* ============================================
@@ -244,16 +236,18 @@ html {
 
   .accordion-card {
     flex: none !important;
-    height: 120px;
-    border-radius: 16px;
+    height: 100px;
+    border-radius: 12px;
   }
 
   .accordion-card.active {
-    height: 350px;
+    height: 320px;
   }
 
   .accordion-card .card-label {
     padding: 20px;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .accordion-card .card-content {
@@ -267,7 +261,7 @@ html {
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -276,14 +270,14 @@ html {
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
+  animation: fade-in-up 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
-/* Arrow hover animation (Vega-style) */
+/* Arrow hover animation */
 .arrow-icon {
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .group:hover .arrow-icon {
-  transform: translate(3px, -3px);
+  transform: translate(4px, -4px);
 }
