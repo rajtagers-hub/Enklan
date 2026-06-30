@@ -11,13 +11,19 @@ import {
   Users, 
   MessageSquare,
   ShieldCheck,
-  ChevronRight
+  ChevronRight,
+  RefreshCw,
+  CheckCircle2,
+  AlertTriangle
 } from "lucide-react";
 import Logo from "@/components/Logo";
+import { useCMS } from "@/context/CMSContext";
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
+  const { forceSyncFromLocal } = useCMS();
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'success' | 'no-data' | 'error'>('idle');
 
   useEffect(() => {
     const auth = localStorage.getItem("enklan_auth");
@@ -131,6 +137,39 @@ export default function AdminDashboard() {
                      <span className="text-sm font-bold text-blue-500">Databaza: SINRONIZUAR</span>
                      <div className="w-2 h-2 rounded-full bg-blue-500" />
                   </div>
+                  
+                  {/* Force Sync Button — push this device's local data to the central DB */}
+                  <button
+                    onClick={async () => {
+                      setSyncStatus('syncing');
+                      try {
+                        const success = await forceSyncFromLocal();
+                        setSyncStatus(success ? 'success' : 'no-data');
+                      } catch {
+                        setSyncStatus('error');
+                      }
+                      setTimeout(() => setSyncStatus('idle'), 4000);
+                    }}
+                    disabled={syncStatus === 'syncing'}
+                    className={`w-full p-4 rounded-2xl border flex items-center justify-center gap-3 font-bold text-sm uppercase tracking-widest transition-all ${
+                      syncStatus === 'success'
+                        ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                        : syncStatus === 'error' || syncStatus === 'no-data'
+                        ? 'bg-red-500/10 border-red-500/30 text-red-400'
+                        : 'bg-orange-500/10 border-orange-500/30 text-orange-400 hover:bg-orange-500/20'
+                    }`}
+                  >
+                    {syncStatus === 'syncing' && <RefreshCw size={16} className="animate-spin" />}
+                    {syncStatus === 'success' && <CheckCircle2 size={16} />}
+                    {(syncStatus === 'error' || syncStatus === 'no-data') && <AlertTriangle size={16} />}
+                    {syncStatus === 'idle' && <RefreshCw size={16} />}
+                    
+                    {syncStatus === 'idle' && 'Sinkronizo të dhënat lokale'}
+                    {syncStatus === 'syncing' && 'Duke sinkronizuar...'}
+                    {syncStatus === 'success' && 'U sinkronizua me sukses!'}
+                    {syncStatus === 'no-data' && 'Nuk ka të dhëna lokale'}
+                    {syncStatus === 'error' && 'Gabim gjatë sinkronizimit'}
+                  </button>
                </div>
             </div>
          </div>
