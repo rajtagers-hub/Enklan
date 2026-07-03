@@ -17,16 +17,22 @@ import { useCMS } from "@/context/CMSContext";
 import Link from "next/link";
 
 /* ───────────────────────────────────────────────
-   FALLBACK IMAGE
+   FALLBACK IMAGES
    ─────────────────────────────────────────────── */
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=1200";
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&q=80&w=1920";
+
+const SERVICE_FALLBACKS: Record<string, string> = {
+  "projektim-elektrik": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200",
+  "panele-diellore": "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=1200",
+  "smart-home": "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=1200",
+};
 
 function getServiceImage(service: any) {
   if (service.image) return service.image;
   if (service.subsections && service.subsections.length > 0 && service.subsections[0].image) {
     return service.subsections[0].image;
   }
-  return FALLBACK_IMAGE;
+  return SERVICE_FALLBACKS[service.slug] || FALLBACK_IMAGE;
 }
 
 /* ───────────────────────────────────────────────
@@ -223,7 +229,7 @@ export default function HomeContent() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         {/* Dynamic Gradient Overlay for better contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/90 via-[#050505]/60 to-[#050505]/90" />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
         
         {/* Hero Content */}
         <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 md:px-10 mt-20">
@@ -341,7 +347,7 @@ export default function HomeContent() {
                     <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4 drop-shadow-md">
                       0{index + 1}
                     </div>
-                    <h3 className="text-lg font-medium text-white writing-vertical-lr rotate-180 hidden md:block tracking-wide drop-shadow-md">
+                    <h3 className="text-lg font-medium text-white writing-vertical-lr hidden md:block tracking-wide drop-shadow-md">
                       {service.title}
                     </h3>
                     <h3 className="text-lg font-medium text-white md:hidden drop-shadow-md">
