@@ -19,12 +19,12 @@ import Link from "next/link";
 /* ───────────────────────────────────────────────
    FALLBACK IMAGES
    ─────────────────────────────────────────────── */
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=1920";
+const FALLBACK_IMAGE = "/images/hero-bg.png";
 
 const SERVICE_FALLBACKS: Record<string, string> = {
   "projektim-elektrik": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200",
   "panele-diellore": "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=1200",
-  "smart-home": "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&q=80&w=1200",
+  "smart-home": "/images/smart-home-bg.png",
 };
 
 function getServiceImage(service: any) {
