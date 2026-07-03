@@ -19,17 +19,17 @@ import Link from "next/link";
 /* ───────────────────────────────────────────────
    FALLBACK IMAGES
    ─────────────────────────────────────────────── */
-const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&q=80&w=1920";
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=1920";
 
 const SERVICE_FALLBACKS: Record<string, string> = {
   "projektim-elektrik": "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200",
   "panele-diellore": "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=1200",
-  "smart-home": "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=1200",
+  "smart-home": "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&q=80&w=1200",
 };
 
 function getServiceImage(service: any) {
-  if (service.image) return service.image;
-  if (service.subsections && service.subsections.length > 0 && service.subsections[0].image) {
+  if (service.image && typeof service.image === 'string' && service.image.trim() !== "") return service.image;
+  if (service.subsections && service.subsections.length > 0 && service.subsections[0].image && typeof service.subsections[0].image === 'string' && service.subsections[0].image.trim() !== "") {
     return service.subsections[0].image;
   }
   return SERVICE_FALLBACKS[service.slug] || FALLBACK_IMAGE;
@@ -98,7 +98,9 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {visibleProjects.map((project: any, i: number) => (
+        {visibleProjects.map((project: any, i: number) => {
+          const projectImage = (project.image && typeof project.image === 'string' && project.image.trim() !== "") ? project.image : FALLBACK_IMAGE;
+          return (
           <motion.div
             key={`${current}-${i}`}
             initial={{ opacity: 0, y: 20 }}
@@ -107,7 +109,7 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
             className="group relative aspect-[16/10] rounded-[2rem] overflow-hidden bg-zinc-900"
           >
             <img 
-              src={project.image || FALLBACK_IMAGE}
+              src={projectImage}
               alt={project.title}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             />
@@ -122,7 +124,7 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
               )}
             </div>
           </motion.div>
-        ))}
+        )})}
         {/* Fill empty spots if there are fewer projects than itemsPerSlide */}
         {visibleProjects.length < itemsPerSlide && Array.from({ length: itemsPerSlide - visibleProjects.length }).map((_, i) => (
             <div key={`empty-${i}`} className="hidden md:block aspect-[16/10] rounded-[2rem] border border-white/5 bg-white/[0.01]"></div>
@@ -175,8 +177,8 @@ export default function HomeContent() {
     return <CoinIntro onComplete={() => setShowIntro(false)} />;
   }
 
-  const heroImage = content.hero?.image || FALLBACK_IMAGE;
-  const introImage = content.about?.image || FALLBACK_IMAGE;
+  const heroImage = (content.hero?.image && typeof content.hero.image === 'string' && content.hero.image.trim() !== "") ? content.hero.image : FALLBACK_IMAGE;
+  const introImage = (content.about?.image && typeof content.about.image === 'string' && content.about.image.trim() !== "") ? content.about.image : FALLBACK_IMAGE;
 
   return (
     <main className="relative min-h-screen selection:bg-blue-500/30">
@@ -347,7 +349,7 @@ export default function HomeContent() {
                     <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4 drop-shadow-md">
                       0{index + 1}
                     </div>
-                    <h3 className="text-lg font-medium text-white writing-vertical-lr hidden md:block tracking-wide drop-shadow-md">
+                    <h3 className="text-lg font-medium text-white hidden md:block tracking-wide drop-shadow-md">
                       {service.title}
                     </h3>
                     <h3 className="text-lg font-medium text-white md:hidden drop-shadow-md">
