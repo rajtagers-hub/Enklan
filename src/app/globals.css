@@ -32,50 +32,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* ============================================
-   GALAXY BACKGROUND (kept for admin/other pages)
-   ============================================ */
-.galaxy-bg {
-  position: fixed;
-  inset: -100px;
-  z-index: -1;
-  background: 
-    radial-gradient(circle at 20% 30%, #081221 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, #081221 0%, transparent 40%),
-    var(--background);
-  filter: blur(80px);
-  opacity: 0.4;
-  animation: galaxy-pulse 30s ease-in-out infinite alternate;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-@keyframes galaxy-pulse {
-  0% { transform: scale(1) translateZ(0); }
-  100% { transform: scale(1.05) translateZ(0); }
-}
-
-.stardust {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image: 
-    radial-gradient(1px 1px at 10% 10%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 20% 40%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 40% 20%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 60% 80%, rgba(255,255,255,0.4), transparent),
-    radial-gradient(1px 1px at 80% 50%, rgba(255,255,255,0.4), transparent);
-  background-size: 300px 300px;
-  opacity: 0.2;
-  animation: stardust-float 90s linear infinite;
-  will-change: background-position;
-  transform: translateZ(0);
-}
-
-@keyframes stardust-float {
-  from { background-position: 0 0; }
-  to { background-position: 300px 600px; }
-}
+/* Backgrounds removed for cleaner homepage */
 
 /* ============================================
    SHARED COMPONENTS

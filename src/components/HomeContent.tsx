@@ -17,6 +17,19 @@ import { useCMS } from "@/context/CMSContext";
 import Link from "next/link";
 
 /* ───────────────────────────────────────────────
+   FALLBACK IMAGE
+   ─────────────────────────────────────────────── */
+const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=1200";
+
+function getServiceImage(service: any) {
+  if (service.image) return service.image;
+  if (service.subsections && service.subsections.length > 0 && service.subsections[0].image) {
+    return service.subsections[0].image;
+  }
+  return FALLBACK_IMAGE;
+}
+
+/* ───────────────────────────────────────────────
    ANIMATED COUNTER COMPONENT
    ─────────────────────────────────────────────── */
 function AnimatedCounter({ target, suffix = "" }: { target: string; suffix?: string }) {
@@ -44,7 +57,7 @@ function AnimatedCounter({ target, suffix = "" }: { target: string; suffix?: str
   }, [isInView, numericTarget]);
 
   return (
-    <div ref={ref} className="stat-counter text-4xl md:text-6xl font-light tracking-tight text-white">
+    <div ref={ref} className="stat-counter text-4xl md:text-6xl font-light tracking-tight text-white whitespace-nowrap">
       {count}{suffix}
     </div>
   );
@@ -85,11 +98,12 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="group relative aspect-[16/10] rounded-[2rem] overflow-hidden"
+            className="group relative aspect-[16/10] rounded-[2rem] overflow-hidden bg-zinc-900"
           >
-            <div 
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105"
-              style={{ backgroundImage: `url(${project.image})` }}
+            <img 
+              src={project.image || FALLBACK_IMAGE}
+              alt={project.title}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90 transition-opacity duration-500" />
             <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
@@ -103,26 +117,32 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
             </div>
           </motion.div>
         ))}
+        {/* Fill empty spots if there are fewer projects than itemsPerSlide */}
+        {visibleProjects.length < itemsPerSlide && Array.from({ length: itemsPerSlide - visibleProjects.length }).map((_, i) => (
+            <div key={`empty-${i}`} className="hidden md:block aspect-[16/10] rounded-[2rem] border border-white/5 bg-white/[0.01]"></div>
+        ))}
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-8 pt-4">
-        <button onClick={prev} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
-          <ChevronLeft size={24} strokeWidth={1.5} />
-        </button>
-        <div className="flex gap-3">
-          {Array.from({ length: totalSlides }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              className={`carousel-dot ${i === current ? "active" : ""}`}
-            />
-          ))}
+      {totalSlides > 1 && (
+        <div className="flex items-center justify-center gap-8 pt-4">
+          <button onClick={prev} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
+            <ChevronLeft size={24} strokeWidth={1.5} />
+          </button>
+          <div className="flex gap-3">
+            {Array.from({ length: totalSlides }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                className={`carousel-dot ${i === current ? "active" : ""}`}
+              />
+            ))}
+          </div>
+          <button onClick={next} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
+            <ChevronRight size={24} strokeWidth={1.5} />
+          </button>
         </div>
-        <button onClick={next} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
-          <ChevronRight size={24} strokeWidth={1.5} />
-        </button>
-      </div>
+      )}
     </div>
   );
 }
@@ -149,11 +169,8 @@ export default function HomeContent() {
     return <CoinIntro onComplete={() => setShowIntro(false)} />;
   }
 
-  const SERVICE_IMAGES = [
-    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=1200",
-    "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=1200",
-    "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=1200",
-  ];
+  const heroImage = content.hero?.image || FALLBACK_IMAGE;
+  const introImage = content.about?.image || FALLBACK_IMAGE;
 
   return (
     <main className="relative min-h-screen selection:bg-blue-500/30">
@@ -198,13 +215,15 @@ export default function HomeContent() {
       {/* ════════════════════════════════════════════
           HERO — Elegant Full-screen
          ════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Subtle Background */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&q=80&w=1920)" }}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+        {/* Hero Background Image */}
+        <img 
+          src={heroImage}
+          alt="Hero Background"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-[#050505]/80 backdrop-blur-[2px]" />
+        {/* Dynamic Gradient Overlay for better contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/90 via-[#050505]/60 to-[#050505]/90" />
         
         {/* Hero Content */}
         <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 md:px-10 mt-20">
@@ -220,7 +239,7 @@ export default function HomeContent() {
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-medium leading-[1.1] tracking-tight text-white mb-8">
               Përsosje në çdo detaj të <br className="hidden md:block" />
-              <span className="text-zinc-500">infrastrukturës elektrike.</span>
+              <span className="text-zinc-400">infrastrukturës elektrike.</span>
             </h1>
             <div className="flex items-center gap-6">
               <button 
@@ -268,11 +287,12 @@ export default function HomeContent() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
-            className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-[2rem] overflow-hidden"
+            className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-900"
           >
-            <div 
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: "url(https://images.unsplash.com/photo-1558618666-fcd25c85f82e?auto=format&fit=crop&q=80&w=1200)" }}
+            <img 
+              src={introImage}
+              alt="About Enklan"
+              className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black/10" />
           </motion.div>
@@ -300,52 +320,56 @@ export default function HomeContent() {
           </motion.div>
 
           <div className="accordion-cards">
-            {content.services.map((service: any, index: number) => (
-              <div
-                key={service.slug}
-                className={`accordion-card ${activeCard === index ? "active" : ""}`}
-                onClick={() => setActiveCard(index)}
-                onMouseEnter={() => setActiveCard(index)}
-              >
-                <div 
-                  className="card-bg"
-                  style={{ backgroundImage: `url(${SERVICE_IMAGES[index] || SERVICE_IMAGES[0]})` }}
-                />
-                <div className="card-overlay" />
-                
-                {/* Collapsed Label */}
-                <div className="card-label">
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 mb-4">
-                    0{index + 1}
-                  </div>
-                  <h3 className="text-lg font-medium text-zinc-300 writing-vertical-lr rotate-180 hidden md:block tracking-wide">
-                    {service.title}
-                  </h3>
-                  <h3 className="text-lg font-medium text-zinc-300 md:hidden">
-                    {service.title}
-                  </h3>
-                </div>
-
-                {/* Expanded Content */}
-                <div className="card-content">
-                  <div className="max-w-md">
-                    <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4">
+            {content.services.map((service: any, index: number) => {
+              const bgImage = getServiceImage(service);
+              return (
+                <div
+                  key={service.slug}
+                  className={`accordion-card ${activeCard === index ? "active" : ""}`}
+                  onClick={() => setActiveCard(index)}
+                  onMouseEnter={() => setActiveCard(index)}
+                >
+                  <img 
+                    src={bgImage} 
+                    alt={service.title}
+                    className="card-bg w-full h-full object-cover"
+                  />
+                  <div className="card-overlay" />
+                  
+                  {/* Collapsed Label */}
+                  <div className="card-label">
+                    <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4 drop-shadow-md">
                       0{index + 1}
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-medium text-white mb-6">{service.title}</h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed mb-8 font-light">
-                      {service.desc}
-                    </p>
-                    <Link
-                      href={`/services/${service.slug}`}
-                      className="group inline-flex items-center justify-center w-12 h-12 rounded-full border border-white/20 hover:border-white text-white transition-all"
-                    >
-                      <ArrowUpRight size={18} strokeWidth={1.5} className="arrow-icon" />
-                    </Link>
+                    <h3 className="text-lg font-medium text-white writing-vertical-lr rotate-180 hidden md:block tracking-wide drop-shadow-md">
+                      {service.title}
+                    </h3>
+                    <h3 className="text-lg font-medium text-white md:hidden drop-shadow-md">
+                      {service.title}
+                    </h3>
+                  </div>
+
+                  {/* Expanded Content */}
+                  <div className="card-content">
+                    <div className="max-w-md">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-300 mb-4 drop-shadow-md">
+                        0{index + 1}
+                      </div>
+                      <h3 className="text-3xl md:text-4xl font-medium text-white mb-6 drop-shadow-md">{service.title}</h3>
+                      <p className="text-zinc-200 text-sm leading-relaxed mb-8 font-light drop-shadow-md">
+                        {service.desc}
+                      </p>
+                      <Link
+                        href={`/services/${service.slug}`}
+                        className="group inline-flex items-center justify-center w-12 h-12 rounded-full border border-white/50 hover:border-white hover:bg-white text-white hover:text-black transition-all"
+                      >
+                        <ArrowUpRight size={18} strokeWidth={1.5} className="arrow-icon" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -371,7 +395,7 @@ export default function HomeContent() {
                 className="flex flex-col items-center justify-center text-center px-4"
               >
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 mt-4">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 mt-4 whitespace-nowrap">
                   {stat.label}
                 </div>
               </motion.div>
