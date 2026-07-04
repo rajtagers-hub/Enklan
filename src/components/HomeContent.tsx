@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
-import CoinIntro from "./CoinIntro";
 import { 
   MessageCircle, Mail, MapPin, Phone,
   Menu, ArrowRight, Zap, Sun, Home as HomeIcon, 
@@ -158,9 +157,11 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
 /* ───────────────────────────────────────────────
    MAIN HOME CONTENT
    ─────────────────────────────────────────────── */
-export default function HomeContent() {
+export default function HomeContent({ initialData }: { initialData?: any }) {
   const { content } = useCMS();
-  const [showIntro, setShowIntro] = useState(true);
+  
+  // Use CMS data or fallback to passed initial data
+  const pageData = content || initialData;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -172,10 +173,6 @@ export default function HomeContent() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  if (showIntro) {
-    return <CoinIntro onComplete={() => setShowIntro(false)} />;
-  }
 
   const heroImage = (content.hero?.image && typeof content.hero.image === 'string' && content.hero.image.trim() !== "") ? content.hero.image : FALLBACK_IMAGE;
   const introImage = (content.about?.image && typeof content.about.image === 'string' && content.about.image.trim() !== "") ? content.about.image : FALLBACK_IMAGE;
