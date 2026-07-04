@@ -2,6 +2,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ArrowLeft, Zap, Sun, Home as HomeIcon, Settings, Code, FileText } from "lucide-react";
+import Image from "next/image";
 import Logo from "@/components/Logo";
 
 import { useState } from "react";
@@ -160,7 +161,7 @@ export default function ServicePage() {
               x
             </button>
             <div className="h-64 relative">
-              <img src={activeSubsection.image} alt={activeSubsection.title} className="w-full h-full object-cover" />
+              <Image src={activeSubsection.image} alt={activeSubsection.title} fill className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent" />
             </div>
             <div className="p-8 space-y-4">
@@ -191,7 +192,7 @@ export default function ServicePage() {
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedProjects.map((project: any, index: number) => (
                  <div key={index} className="relative aspect-video rounded-3xl overflow-hidden group border border-white/5">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition-all duration-700" />
+                    <Image src={project.image} alt={project.title} fill className="object-cover group-hover:scale-110 group-hover:rotate-1 transition-all duration-700" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
                        <div className="text-[10px] font-black tracking-widest text-blue-500 uppercase mb-2">
                           {project.subcategoryId 

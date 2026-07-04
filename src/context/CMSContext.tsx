@@ -2,9 +2,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { INITIAL_CONTENT } from '@/data/initialContent';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type CMSData = any;
+
 interface CMSContextValue {
-  content: any;
-  updateContent: (newContent: any) => void;
+  content: CMSData;
+  updateContent: (newContent: CMSData) => void;
   forceSyncFromLocal: () => Promise<boolean>;
 }
 
@@ -42,7 +45,7 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
     initCMS();
   }, []);
 
-  const updateContent = async (newContent: any) => {
+  const updateContent = async (newContent: CMSData) => {
     // Optimistic update for snappy UI
     setContent(newContent);
     localStorage.setItem('enklan_cms_content', JSON.stringify(newContent));
@@ -58,9 +61,10 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
         const result = await response.json().catch(() => ({}));
         throw new Error(result.error || 'Failed to save to central database');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to save CMS data to central storage:', error);
-      alert('Error saving data to Vercel Blob: ' + (error.message || 'Unknown error') + '\n\nYour changes are only saved locally on this device. Please ensure Vercel Blob is configured correctly in your Vercel Dashboard.');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert('Error saving data to Vercel Blob: ' + errorMessage + '\n\nYour changes are only saved locally on this device. Please ensure Vercel Blob is configured correctly in your Vercel Dashboard.');
     }
   };
 

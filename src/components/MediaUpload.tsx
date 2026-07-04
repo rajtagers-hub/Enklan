@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
-import { UploadCloud, Loader2, X, Image as ImageIcon, Film } from "lucide-react";
+import Image from "next/image";
+import { Loader2, X, Image as ImageIcon, Film } from "lucide-react";
 
 interface MediaUploadProps {
   value: string;
@@ -17,7 +18,7 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
     if (!file.type.startsWith('image/')) return file;
     
     return new Promise((resolve) => {
-      const img = new Image();
+      const img = new window.Image();
       const url = URL.createObjectURL(file);
       
       img.onload = () => {
@@ -98,9 +99,13 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
       } else {
         alert(data.error || "Gabim gjatë ngarkimit të skedarit.");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      alert(err.message || "Gabim rrjeti gjatë ngarkimit.");
+      if (err instanceof Error) {
+        alert(err.message || "Gabim rrjeti gjatë ngarkimit.");
+      } else {
+        alert("Gabim rrjeti gjatë ngarkimit.");
+      }
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -116,7 +121,7 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
           {isVideo ? (
             <video src={value} controls className="w-full h-full object-cover" />
           ) : (
-            <img src={value} alt="Preview" className="w-full h-full object-cover" />
+            <Image src={value} alt="Preview" fill className="object-cover" />
           )}
           <button
             onClick={() => onChange("")}

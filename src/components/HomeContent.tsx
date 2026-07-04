@@ -2,11 +2,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { 
-  MessageCircle, Mail, MapPin, Phone,
-  Menu, ArrowRight, Zap, Sun, Home as HomeIcon, 
-  ChevronLeft, ChevronRight, ArrowUpRight
+  Menu, ArrowRight, ArrowUpRight,
+  ChevronLeft, ChevronRight
 } from "lucide-react";
 import { Instagram, Facebook, Linkedin } from "./Icons";
+import Image from "next/image";
 
 import Logo from "./Logo";
 import SideMenu from "./SideMenu";
@@ -26,12 +26,13 @@ const SERVICE_FALLBACKS: Record<string, string> = {
   "smart-home": "/images/smart-home-bg.png",
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getServiceImage(service: any) {
   if (service.image && typeof service.image === 'string' && service.image.trim() !== "") return service.image;
-  if (service.subsections && service.subsections.length > 0 && service.subsections[0].image && typeof service.subsections[0].image === 'string' && service.subsections[0].image.trim() !== "") {
+  if (Array.isArray(service.subsections) && service.subsections.length > 0 && service.subsections[0].image && typeof service.subsections[0].image === 'string' && service.subsections[0].image.trim() !== "") {
     return service.subsections[0].image;
   }
-  return SERVICE_FALLBACKS[service.slug] || FALLBACK_IMAGE;
+  return SERVICE_FALLBACKS[service.slug as string] || FALLBACK_IMAGE;
 }
 
 /* ───────────────────────────────────────────────
@@ -107,10 +108,11 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
             transition={{ delay: i * 0.1 }}
             className="group relative aspect-[16/10] rounded-[2rem] overflow-hidden bg-zinc-900"
           >
-            <img 
+            <Image 
               src={projectImage}
               alt={project.title}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              fill
+              className="object-cover transition-transform duration-1000 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90 transition-opacity duration-500" />
             <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
@@ -133,19 +135,20 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
       {/* Controls */}
       {totalSlides > 1 && (
         <div className="flex items-center justify-center gap-8 pt-4">
-          <button onClick={prev} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
+          <button aria-label="Previous slide" onClick={prev} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-white">
             <ChevronLeft size={24} strokeWidth={1.5} />
           </button>
           <div className="flex gap-3">
             {Array.from({ length: totalSlides }).map((_, i) => (
               <button
                 key={i}
+                aria-label={`Go to slide ${i + 1}`}
                 onClick={() => setCurrent(i)}
                 className={`carousel-dot ${i === current ? "active" : ""}`}
               />
             ))}
           </div>
-          <button onClick={next} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-500 hover:text-white">
+          <button aria-label="Next slide" onClick={next} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-white">
             <ChevronRight size={24} strokeWidth={1.5} />
           </button>
         </div>
@@ -157,10 +160,12 @@ function ProjectCarousel({ projects }: { projects: any[] }) {
 /* ───────────────────────────────────────────────
    MAIN HOME CONTENT
    ─────────────────────────────────────────────── */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function HomeContent({ initialData }: { initialData?: any }) {
   const { content } = useCMS();
   
   // Use CMS data or fallback to passed initial data
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const pageData = content || initialData;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -192,11 +197,11 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
           <Logo className={isScrolled ? "scale-90" : ""} />
           
           <div className="hidden lg:flex items-center gap-10">
-            <NavLink href="#services">Shërbimet</NavLink>
-            <NavLink href="#about">Rreth Nesh</NavLink>
-            <NavLink href="/portfolio">Portofoli</NavLink>
-            <NavLink href="#projects">Projekte</NavLink>
-            <NavLink href="#contact">Kontakt</NavLink>
+            <Link href="#services" className="text-white hover:text-zinc-300 text-xs font-semibold uppercase tracking-[0.2em] transition-colors">Shërbimet</Link>
+            <Link href="#about" className="text-white hover:text-zinc-300 text-xs font-semibold uppercase tracking-[0.2em] transition-colors">Rreth Nesh</Link>
+            <Link href="/portfolio" className="text-white hover:text-zinc-300 text-xs font-semibold uppercase tracking-[0.2em] transition-colors">Portofoli</Link>
+            <Link href="#projects" className="text-white hover:text-zinc-300 text-xs font-semibold uppercase tracking-[0.2em] transition-colors">Projekte</Link>
+            <Link href="#contact" className="text-white hover:text-zinc-300 text-xs font-semibold uppercase tracking-[0.2em] transition-colors">Kontakt</Link>
           </div>
 
           <div className="flex items-center gap-4 md:gap-6">
@@ -208,6 +213,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
               <span>Na Kontaktoni</span>
             </button>
             <button
+              aria-label="Open Menu"
               className="p-2 hover:bg-white/5 rounded-full transition-all"
               onClick={() => setIsMenuOpen(true)}
             >
@@ -222,13 +228,10 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
          ════════════════════════════════════════════ */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Hero Background Image */}
-        <img 
-          src={heroImage}
-          alt="Hero Background"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        {/* Dynamic Gradient Overlay for better contrast */}
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
+        <div className="absolute inset-0">
+          <Image src={heroImage} alt="Hero Background" fill className="object-cover" priority />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
+        </div>
         
         {/* Hero Content */}
         <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 md:px-10 mt-20">
@@ -294,10 +297,11 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
             className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-900"
           >
-            <img 
+            <Image 
               src={introImage}
               alt="About Enklan"
-              className="absolute inset-0 w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-black/10" />
           </motion.div>
@@ -315,7 +319,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             viewport={{ once: true }}
             className="mb-16 md:mb-24"
           >
-            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-500 mb-6 flex items-center gap-4">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-6 flex items-center gap-4">
               <span className="w-8 h-px bg-zinc-700" />
               Fushat e Ekspertizës
             </div>
@@ -334,10 +338,11 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                   onClick={() => setActiveCard(index)}
                   onMouseEnter={() => setActiveCard(index)}
                 >
-                  <img 
+                  <Image 
                     src={bgImage} 
                     alt={service.title}
-                    className="card-bg w-full h-full object-cover"
+                    fill
+                    className="card-bg object-cover"
                   />
                   <div className="card-overlay" />
                   
@@ -400,7 +405,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                 className="flex flex-col items-center justify-center text-center px-4"
               >
                 <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 mt-4 whitespace-nowrap">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mt-4 whitespace-nowrap">
                   {stat.label}
                 </div>
               </motion.div>
@@ -419,7 +424,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-500 mb-8">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-8">
               Misioni Ynë
             </div>
             <h2 className="text-3xl md:text-5xl font-medium tracking-tight leading-[1.3] text-white">
@@ -450,7 +455,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-500 mb-6 flex items-center gap-4">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-6 flex items-center gap-4">
                 <span className="w-8 h-px bg-zinc-700" />
                 Portofoli Ynë
               </div>
@@ -526,7 +531,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
 
             {/* Links Columns */}
             <div className="lg:col-span-2 space-y-6">
-              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Navigimi</h4>
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Navigimi</h4>
               <div className="flex flex-col gap-4">
                 <FooterLink href="/#services">Shërbimet</FooterLink>
                 <FooterLink href="/portfolio">Portofoli</FooterLink>
@@ -536,16 +541,16 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             </div>
 
             <div className="lg:col-span-4 space-y-6">
-              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500">Kontakt</h4>
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400">Kontakt</h4>
               <div className="flex flex-col gap-4">
                 <a href={`tel:${content.settings.phone}`} className="text-sm font-light text-zinc-400 hover:text-white transition-colors">{content.settings.phone}</a>
                 <a href={`mailto:${content.settings.email}`} className="text-sm font-light text-zinc-400 hover:text-white transition-colors">{content.settings.email}</a>
                 <span className="text-sm font-light text-zinc-400">{content.settings.address}</span>
               </div>
-              <div className="flex gap-4 pt-4">
-                <SocialLink href={content.settings.socials.instagram}><Instagram size={16} /></SocialLink>
-                <SocialLink href={content.settings.socials.facebook}><Facebook size={16} /></SocialLink>
-                <SocialLink href={content.settings.socials.linkedin}><Linkedin size={16} /></SocialLink>
+              <div className="flex items-center gap-4">
+                <SocialLink href={content.settings.socials.instagram} ariaLabel="Instagram"><Instagram size={16} /></SocialLink>
+                <SocialLink href={content.settings.socials.facebook} ariaLabel="Facebook"><Facebook size={16} /></SocialLink>
+                <SocialLink href={content.settings.socials.linkedin} ariaLabel="LinkedIn"><Linkedin size={16} /></SocialLink>
               </div>
             </div>
           </div>
@@ -584,13 +589,14 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
   );
 }
 
-function SocialLink({ href, children }: { href: string; children: React.ReactNode }) {
+function SocialLink({ href, ariaLabel, children }: { href: string; ariaLabel: string; children: React.ReactNode }) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-zinc-500 hover:text-white transition-colors"
+      aria-label={ariaLabel}
+      className="p-3 text-zinc-400 hover:text-white transition-colors"
     >
       {children}
     </a>
