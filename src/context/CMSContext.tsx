@@ -49,13 +49,18 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
     
     // Save to central DB
     try {
-      await fetch('/api/cms', {
+      const response = await fetch('/api/cms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newContent)
       });
-    } catch (error) {
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || 'Failed to save to central database');
+      }
+    } catch (error: any) {
       console.error('Failed to save CMS data to central storage:', error);
+      alert('Error saving data to Vercel Blob: ' + (error.message || 'Unknown error') + '\n\nYour changes are only saved locally on this device. Please ensure Vercel Blob is configured correctly in your Vercel Dashboard.');
     }
   };
 

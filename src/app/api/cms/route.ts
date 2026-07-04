@@ -14,8 +14,8 @@ export async function GET() {
       return NextResponse.json({ exists: false });
     }
 
-    // Fetch the content of the blob
-    const response = await fetch(cmsBlob.downloadUrl, { cache: 'no-store' });
+    // Fetch the content of the blob (cache bust the Vercel Edge CDN)
+    const response = await fetch(cmsBlob.downloadUrl + '?t=' + Date.now(), { cache: 'no-store' });
     if (!response.ok) {
         throw new Error('Failed to fetch blob content');
     }

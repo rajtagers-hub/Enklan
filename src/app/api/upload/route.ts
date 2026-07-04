@@ -11,14 +11,11 @@ export async function POST(request: Request) {
     }
 
     const blob = await put(file.name, file, {
-      access: 'private',
+      access: 'public',
       addRandomSuffix: true,
     });
 
-    // Return a proxy URL that serves the private blob through our API
-    const proxyUrl = `/api/blob/${blob.pathname}`;
-
-    return NextResponse.json({ success: true, url: proxyUrl });
+    return NextResponse.json({ success: true, url: blob.url });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Upload failed';
     console.error('Upload error:', message);
