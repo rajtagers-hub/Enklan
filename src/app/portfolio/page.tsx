@@ -7,16 +7,19 @@ import Logo from "@/components/Logo";
 import SecretCoin from "@/components/SecretCoin";
 import { useCMS } from "@/context/CMSContext";
 import ContactModal from "@/components/ContactModal";
+import ProjectModal from "@/components/ProjectModal";
 
 export default function PortfolioPage() {
   const router = useRouter();
   const { content } = useCMS();
   const PROJECTS = content.portfolio || [];
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
 
   return (
     <main className="relative min-h-screen bg-black text-white selection:bg-blue-500/30 overflow-x-hidden">
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <ProjectModal isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} project={selectedProject} />
       <div className="galaxy-bg opacity-20" />
       
       {/* Header */}
@@ -66,7 +69,8 @@ export default function PortfolioPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="group relative aspect-video rounded-3xl overflow-hidden border border-white/5 bg-zinc-900"
+              onClick={() => setSelectedProject(project)}
+              className="group relative aspect-video rounded-3xl overflow-hidden border border-white/5 bg-zinc-900 cursor-pointer"
             >
                {/* Project Image */}
                <div 

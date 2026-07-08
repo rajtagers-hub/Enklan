@@ -121,7 +121,7 @@ export default function MediaUpload({ value, onChange, accept = "image/*,video/*
           {isVideo ? (
             <video src={value} controls className="w-full h-full object-cover" />
           ) : (
-            <Image src={value} alt="Preview" fill className="object-cover" />
+            <Image src={value} alt="Preview" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
           )}
           <button
             onClick={() => onChange("")}

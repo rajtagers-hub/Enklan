@@ -161,7 +161,7 @@ export default function ServicePage() {
               x
             </button>
             <div className="h-64 relative">
-              <Image src={activeSubsection.image} alt={activeSubsection.title} fill className="object-cover" />
+              <Image src={activeSubsection.image} alt={activeSubsection.title} fill sizes="(max-width: 768px) 100vw, 800px" className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent" />
             </div>
             <div className="p-8 space-y-4">
@@ -192,7 +192,7 @@ export default function ServicePage() {
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedProjects.map((project: any, index: number) => (
                  <div key={index} className="relative aspect-video rounded-3xl overflow-hidden group border border-white/5">
-                    <Image src={project.image} alt={project.title} fill className="object-cover group-hover:scale-110 group-hover:rotate-1 transition-all duration-700" />
+                    <Image src={project.image} alt={project.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-110 group-hover:rotate-1 transition-all duration-700" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-6">
                        <div className="text-[10px] font-black tracking-widest text-blue-500 uppercase mb-2">
                           {project.subcategoryId 

@@ -24,6 +24,7 @@ export default function RootLayout({
     <html
       lang="sq"
       className={`${dmSans.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col">
         <CMSProvider>

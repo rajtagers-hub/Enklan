@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { 
   Menu, ArrowRight, ArrowUpRight,
   ChevronLeft, ChevronRight
@@ -11,6 +11,7 @@ import Image from "next/image";
 import Logo from "./Logo";
 import SideMenu from "./SideMenu";
 import ContactModal from "./ContactModal";
+import ProjectModal from "./ProjectModal";
 import SecretCoin from "./SecretCoin";
 import { useCMS } from "@/context/CMSContext";
 import Link from "next/link";
@@ -70,94 +71,6 @@ function AnimatedCounter({ target, suffix = "" }: { target: string; suffix?: str
 }
 
 /* ───────────────────────────────────────────────
-   PROJECT CAROUSEL COMPONENT
-   ─────────────────────────────────────────────── */
-function ProjectCarousel({ projects }: { projects: any[] }) {
-  const [current, setCurrent] = useState(0);
-  const [itemsPerSlide, setItemsPerSlide] = useState(2);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setItemsPerSlide(window.innerWidth < 768 ? 1 : 2);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const totalSlides = Math.max(1, Math.ceil(projects.length / itemsPerSlide));
-
-  const next = useCallback(() => setCurrent(c => (c + 1) % totalSlides), [totalSlides]);
-  const prev = useCallback(() => setCurrent(c => (c - 1 + totalSlides) % totalSlides), [totalSlides]);
-
-  const visibleProjects = projects.slice(
-    current * itemsPerSlide,
-    current * itemsPerSlide + itemsPerSlide
-  );
-
-  return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {visibleProjects.map((project: any, i: number) => {
-          const projectImage = (project.image && typeof project.image === 'string' && project.image.trim() !== "") ? project.image : FALLBACK_IMAGE;
-          return (
-          <motion.div
-            key={`${current}-${i}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="group relative aspect-[16/10] rounded-[2rem] overflow-hidden bg-zinc-900"
-          >
-            <Image 
-              src={projectImage}
-              alt={project.title}
-              fill
-              className="object-cover transition-transform duration-1000 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90 transition-opacity duration-500" />
-            <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
-              <div className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase mb-3">
-                {project.category}
-              </div>
-              <h3 className="text-2xl md:text-3xl font-medium text-white mb-2">{project.title}</h3>
-              {project.description && (
-                <p className="text-sm text-zinc-400 line-clamp-2">{project.description}</p>
-              )}
-            </div>
-          </motion.div>
-        )})}
-        {/* Fill empty spots if there are fewer projects than itemsPerSlide */}
-        {visibleProjects.length < itemsPerSlide && Array.from({ length: itemsPerSlide - visibleProjects.length }).map((_, i) => (
-            <div key={`empty-${i}`} className="hidden md:block aspect-[16/10] rounded-[2rem] border border-white/5 bg-white/[0.01]"></div>
-        ))}
-      </div>
-
-      {/* Controls */}
-      {totalSlides > 1 && (
-        <div className="flex items-center justify-center gap-8 pt-4">
-          <button aria-label="Previous slide" onClick={prev} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-white">
-            <ChevronLeft size={24} strokeWidth={1.5} />
-          </button>
-          <div className="flex gap-3">
-            {Array.from({ length: totalSlides }).map((_, i) => (
-              <button
-                key={i}
-                aria-label={`Go to slide ${i + 1}`}
-                onClick={() => setCurrent(i)}
-                className={`carousel-dot ${i === current ? "active" : ""}`}
-              />
-            ))}
-          </div>
-          <button aria-label="Next slide" onClick={next} className="p-3 rounded-full hover:bg-white/5 transition-colors text-zinc-400 hover:text-white">
-            <ChevronRight size={24} strokeWidth={1.5} />
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ───────────────────────────────────────────────
    MAIN HOME CONTENT
    ─────────────────────────────────────────────── */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -169,6 +82,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
   const pageData = content || initialData;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeCard, setActiveCard] = useState(0);
 
@@ -182,10 +96,39 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
   const heroImage = (content.hero?.image && typeof content.hero.image === 'string' && content.hero.image.trim() !== "") ? content.hero.image : FALLBACK_IMAGE;
   const introImage = (content.about?.image && typeof content.about.image === 'string' && content.about.image.trim() !== "") ? content.about.image : FALLBACK_IMAGE;
 
+  const heroImages = [
+    heroImage,
+    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=2000",
+    "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=2000",
+    "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=2000",
+  ];
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  useEffect(() => {
+    let lastSection = "hero";
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target.id && entry.target.id !== lastSection) {
+            lastSection = entry.target.id;
+            setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const sections = document.querySelectorAll("section[id]");
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [heroImages.length]);
+
   return (
     <main className="relative min-h-screen selection:bg-blue-500/30">
       <SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <ProjectModal isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} project={selectedProject} />
 
       {/* ════════════════════════════════════════════
           HEADER — Transparent → Sticky on scroll
@@ -226,10 +169,21 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           HERO — Elegant Full-screen
          ════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
         {/* Hero Background Image */}
         <div className="absolute inset-0">
-          <Image src={heroImage} alt="Hero Background" fill className="object-cover" priority />
+          <AnimatePresence>
+            <motion.div
+              key={heroImageIndex}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <Image src={heroImages[heroImageIndex]} alt="Hero Background" fill sizes="100vw" className="object-cover" priority />
+            </motion.div>
+          </AnimatePresence>
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
         </div>
         
@@ -242,7 +196,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             className="max-w-4xl"
           >
             <div className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-8 flex items-center gap-4">
-              <span className="w-8 h-px bg-zinc-600" />
+              <span className="w-10 h-[2px] bg-blue-600 rounded-full" />
               Inxhinieri & Siguri Elektrike
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-medium leading-[1.1] tracking-tight text-white mb-8">
@@ -263,9 +217,9 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       </section>
 
       {/* ════════════════════════════════════════════
-          INTRO SECTION — Clean 2-column Layout
+          ABOUT SECTION — Consolidated & Classic
          ════════════════════════════════════════════ */}
-      <section id="intro" className="py-32 md:py-40 px-6 md:px-10">
+      <section id="about" className="py-40 md:py-56 px-6 md:px-10">
         <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -274,20 +228,17 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
             className="space-y-10"
           >
+            <div className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-8 flex items-center gap-4">
+              <span className="w-10 h-[2px] bg-blue-600 rounded-full" />
+              Rreth Nesh
+            </div>
             <h2 className="text-3xl md:text-5xl font-medium leading-[1.2] tracking-tight text-white">
-              Ne projektojmë dhe ndërtojmë sisteme energjetike për një të ardhme më të qëndrueshme.
+              Nuk jemi thjesht një kompani inxhinierike; jemi arkitektët e një të ardhmeje me energji inteligjente dhe të sigurt.
             </h2>
             <p className="text-lg text-zinc-400 leading-relaxed font-light">
               Nga instalimet komplekse industriale tek sistemet inteligjente të shtëpive dhe parqet fotovoltaike. 
-              Ekspertiza jonë garanton siguri maksimale dhe efiçencë energjetike të pashoqe.
+              Ekspertiza jonë garanton siguri maksimale dhe efiçencë energjetike të pashoqe. Me një fokus të veçantë në teknologjinë moderne dhe sigurinë absolute, Enklan ndërton sisteme që u rezistojnë kohës dhe kërkesave më të vështira industriale.
             </p>
-            <Link
-              href="/#about"
-              className="group inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-white hover:text-zinc-400 transition-colors"
-            >
-              Lexoni rrugëtimin tonë
-              <ArrowUpRight size={16} className="arrow-icon" />
-            </Link>
           </motion.div>
 
           <motion.div
@@ -295,12 +246,13 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
-            className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-900"
+            className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5"
           >
             <Image 
               src={introImage}
               alt="About Enklan"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
             <div className="absolute inset-0 bg-black/10" />
@@ -309,9 +261,9 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       </section>
 
       {/* ════════════════════════════════════════════
-          SERVICES — Refined Accordion Cards
+          SERVICES — Refined Grid
          ════════════════════════════════════════════ */}
-      <section id="services" className="py-20 md:py-32 px-6 md:px-10 bg-[#0a0a0a]">
+      <section id="services" className="py-32 md:py-48 px-6 md:px-10 bg-[#0a0a0a]">
         <div className="max-w-[1400px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -320,7 +272,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             className="mb-16 md:mb-24"
           >
             <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-6 flex items-center gap-4">
-              <span className="w-8 h-px bg-zinc-700" />
+              <span className="w-10 h-[2px] bg-blue-600 rounded-full" />
               Fushat e Ekspertizës
             </div>
             <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white max-w-2xl">
@@ -328,55 +280,92 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             </h2>
           </motion.div>
 
-          <div className="accordion-cards">
+          <div className="space-y-32 md:space-y-48">
             {content.services.map((service: any, index: number) => {
               const bgImage = getServiceImage(service);
               return (
-                <div
-                  key={service.slug}
-                  className={`accordion-card ${activeCard === index ? "active" : ""}`}
-                  onClick={() => setActiveCard(index)}
-                  onMouseEnter={() => setActiveCard(index)}
-                >
-                  <Image 
-                    src={bgImage} 
-                    alt={service.title}
-                    fill
-                    className="card-bg object-cover"
-                  />
-                  <div className="card-overlay" />
-                  
-                  {/* Collapsed Label */}
-                  <div className="card-label">
-                    <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-400 mb-4 drop-shadow-md">
-                      0{index + 1}
-                    </div>
-                    <h3 className="text-lg font-medium text-white hidden md:block tracking-wide drop-shadow-md">
-                      {service.title}
-                    </h3>
-                    <h3 className="text-lg font-medium text-white md:hidden drop-shadow-md">
-                      {service.title}
-                    </h3>
-                  </div>
-
-                  {/* Expanded Content */}
-                  <div className="card-content">
-                    <div className="max-w-md">
-                      <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-300 mb-4 drop-shadow-md">
-                        0{index + 1}
+                <div key={service.slug} className="flex flex-col gap-12 md:gap-16">
+                  {/* Service Banner */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="relative w-full aspect-square sm:aspect-video lg:aspect-[21/9] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5"
+                  >
+                    <Image 
+                      src={bgImage} 
+                      alt={service.title}
+                      fill
+                      sizes="100vw"
+                      priority={index === 0}
+                      className="object-cover opacity-60"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                    
+                    <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-end">
+                      <div className="max-w-4xl">
+                        <div className="text-sm font-semibold uppercase tracking-widest text-blue-500 mb-4">
+                          0{index + 1}
+                        </div>
+                        <h3 className="text-4xl md:text-6xl font-medium text-white mb-6 tracking-tight">{service.title}</h3>
+                        <p className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed">
+                          {service.desc}
+                        </p>
+                        <Link href={`/services/${service.slug}`} className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-white/20 text-[10px] font-semibold uppercase tracking-[0.2em] text-white hover:bg-white hover:text-black transition-all mt-8 w-fit">
+                          Lexo Më Shumë
+                          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
                       </div>
-                      <h3 className="text-3xl md:text-4xl font-medium text-white mb-6 drop-shadow-md">{service.title}</h3>
-                      <p className="text-zinc-200 text-sm leading-relaxed mb-8 font-light drop-shadow-md">
-                        {service.desc}
-                      </p>
-                      <Link
-                        href={`/services/${service.slug}`}
-                        className="group inline-flex items-center justify-center w-12 h-12 rounded-full border border-white/50 hover:border-white hover:bg-white text-white hover:text-black transition-all"
-                      >
-                        <ArrowUpRight size={18} strokeWidth={1.5} className="arrow-icon" />
-                      </Link>
                     </div>
-                  </div>
+                  </motion.div>
+
+                  {/* Subcategories or Details */}
+                  {service.subsections && service.subsections.length > 0 ? (
+                    <AutoSlider>
+                      {service.subsections.map((sub: any, idx: number) => {
+                        const subImage = (sub.image && typeof sub.image === 'string' && sub.image.trim() !== "") ? sub.image : FALLBACK_IMAGE;
+                        return (
+                          <motion.div
+                            key={sub.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: idx * 0.1 }}
+                            className="group flex flex-col shrink-0 w-[85vw] sm:w-[350px] md:w-[400px] snap-center md:snap-start bg-zinc-950 rounded-3xl overflow-hidden border border-white/5 hover:bg-zinc-900 transition-colors"
+                          >
+                            <div className="relative aspect-video w-full overflow-hidden">
+                              <Image 
+                                src={subImage}
+                                alt={sub.title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                                priority={true}
+                                className="object-cover transition-transform duration-700 group-hover:scale-105 opacity-80"
+                              />
+                            </div>
+                            <div className="p-8">
+                              <h4 className="text-xl font-medium text-white mb-3">{sub.title}</h4>
+                              <p className="text-sm text-zinc-400 leading-relaxed font-light">
+                                {sub.desc}
+                              </p>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </AutoSlider>
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="max-w-4xl border-l-2 border-blue-600 pl-8"
+                    >
+                      <p className="text-lg md:text-2xl text-zinc-400 leading-relaxed font-light">
+                        {service.details}
+                      </p>
+                    </motion.div>
+                  )}
                 </div>
               );
             })}
@@ -387,7 +376,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           STATS — Minimalist layout
          ════════════════════════════════════════════ */}
-      <section className="py-24 md:py-32 border-y border-white/5">
+      <section className="py-32 md:py-40 border-y border-white/5">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-8 md:divide-x divide-white/5">
             {[
@@ -414,40 +403,11 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════
-          ABOUT SECTION — Cleaner execution
-         ════════════════════════════════════════════ */}
-      <section id="about" className="py-24 md:py-40 px-6 md:px-10">
-        <div className="max-w-[1000px] mx-auto text-center space-y-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-8">
-              Misioni Ynë
-            </div>
-            <h2 className="text-3xl md:text-5xl font-medium tracking-tight leading-[1.3] text-white">
-              Nuk jemi thjesht një kompani inxhinierike; jemi arkitektët e një të ardhmeje me energji inteligjente dhe të sigurt.
-            </h2>
-          </motion.div>
-          <motion.div
-             initial={{ opacity: 0, y: 20 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             transition={{ delay: 0.2 }}
-          >
-            <p className="text-lg text-zinc-400 font-light leading-relaxed max-w-2xl mx-auto">
-              Me një fokus të veçantë në teknologjinë moderne dhe sigurinë absolute, Enklan ndërton sisteme që u rezistojnë kohës dhe kërkesave më të vështira industriale.
-            </p>
-          </motion.div>
-        </div>
-      </section>
 
       {/* ════════════════════════════════════════════
-          PROJECTS CAROUSEL
+          PROJECTS — Static Grid
          ════════════════════════════════════════════ */}
-      <section id="projects" className="py-24 md:py-32 px-6 md:px-10 bg-[#0a0a0a] border-t border-white/5">
+      <section id="projects" className="py-32 md:py-48 px-6 md:px-10 bg-[#0a0a0a] border-t border-white/5">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
             <motion.div
@@ -456,7 +416,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
               viewport={{ once: true }}
             >
               <div className="text-[10px] font-semibold uppercase tracking-[0.3em] text-zinc-400 mb-6 flex items-center gap-4">
-                <span className="w-8 h-px bg-zinc-700" />
+                <span className="w-10 h-[2px] bg-blue-600 rounded-full" />
                 Portofoli Ynë
               </div>
               <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white">Projekte Përfaqësuese</h2>
@@ -476,7 +436,41 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             </motion.div>
           </div>
 
-          <ProjectCarousel projects={content.portfolio || []} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {(content.portfolio || []).slice(0, 4).map((project: any, i: number) => {
+              const projectImage = (project.image && typeof project.image === 'string' && project.image.trim() !== "") ? project.image : FALLBACK_IMAGE;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => setSelectedProject(project)}
+                  className="group relative aspect-[16/10] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5 cursor-pointer"
+                >
+                  <Image 
+                    src={projectImage}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90 transition-opacity duration-500" />
+                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
+                    <div className="text-[10px] font-semibold tracking-widest text-zinc-400 uppercase mb-3 flex items-center gap-3">
+                      <span className="w-6 h-[1px] bg-blue-600" />
+                      {project.category}
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-medium text-white mb-2">{project.title}</h3>
+                    {project.description && (
+                      <p className="text-sm text-zinc-400 line-clamp-2">{project.description}</p>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -600,5 +594,72 @@ function SocialLink({ href, ariaLabel, children }: { href: string; ariaLabel: st
     >
       {children}
     </a>
+  );
+}
+
+function AutoSlider({ children }: { children: React.ReactNode }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const slider = scrollRef.current;
+    if (!slider) return;
+
+    let intervalId: NodeJS.Timeout;
+    
+    const startAutoPlay = () => {
+      intervalId = setInterval(() => {
+        if (!slider) return;
+        const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+        
+        // CSS snap-mandatory can fight with JS scroll if the delta isn't large enough.
+        // We get the exact width of the first card + gap to ensure we cross the snap threshold.
+        const firstCard = slider.firstElementChild as HTMLElement;
+        const cardWidth = firstCard ? firstCard.offsetWidth + 24 : 450; 
+
+        // If reached the end, scroll back to start
+        if (slider.scrollLeft >= maxScrollLeft - 10) {
+          slider.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          // Scroll right by exactly one card width
+          slider.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        }
+      }, 3500); // Auto slide every 3.5 seconds
+    };
+
+    startAutoPlay();
+
+    // Pause auto-sliding when user interacts
+    const pausePlay = () => clearInterval(intervalId);
+    const resumePlay = () => startAutoPlay();
+
+    slider.addEventListener('mouseenter', pausePlay);
+    slider.addEventListener('mouseleave', resumePlay);
+    slider.addEventListener('touchstart', pausePlay);
+    slider.addEventListener('touchend', resumePlay);
+
+    return () => {
+      clearInterval(intervalId);
+      slider.removeEventListener('mouseenter', pausePlay);
+      slider.removeEventListener('mouseleave', resumePlay);
+      slider.removeEventListener('touchstart', pausePlay);
+      slider.removeEventListener('touchend', resumePlay);
+    };
+  }, []);
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}} />
+      <div 
+        ref={scrollRef}
+        className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar scroll-smooth"
+        style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+      >
+        {children}
+      </div>
+    </>
   );
 }

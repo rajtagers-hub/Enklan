@@ -238,3 +238,12 @@ html {
 .group:hover .arrow-icon {
   transform: translate(4px, -4px);
 }
+
+/* Hide scrollbar for horizontal sliders */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
