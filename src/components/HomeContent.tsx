@@ -331,12 +331,27 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
 
                   {/* Subcategories or Details */}
                   {service.subsections && service.subsections.length > 0 ? (
-                    <AutoSlider>
-                      {service.subsections.map((sub: any, idx: number) => {
-                        const subImage = (sub.image && typeof sub.image === 'string' && sub.image.trim() !== "") ? sub.image : FALLBACK_IMAGE;
-                        return (
-                          <div
-                            key={sub.id}
+                    <motion.div
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true }}
+                      variants={{
+                        hidden: {},
+                        visible: {
+                          transition: { staggerChildren: 0.1 }
+                        }
+                      }}
+                    >
+                      <AutoSlider>
+                        {service.subsections.map((sub: any, idx: number) => {
+                          const subImage = (sub.image && typeof sub.image === 'string' && sub.image.trim() !== "") ? sub.image : FALLBACK_IMAGE;
+                          return (
+                            <motion.div
+                              key={sub.id}
+                              variants={{
+                                hidden: { opacity: 0, y: 20 },
+                                visible: { opacity: 1, y: 0 }
+                              }}
                             className="group flex flex-col shrink-0 w-[85vw] sm:w-[350px] md:w-[400px] snap-center md:snap-start bg-zinc-950 rounded-3xl overflow-hidden border border-white/5 hover:bg-zinc-900 transition-colors"
                           >
                             <div className="relative aspect-video w-full overflow-hidden">
@@ -355,10 +370,11 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                                 {sub.desc}
                               </p>
                             </div>
-                          </div>
+                          </motion.div>
                         );
                       })}
                     </AutoSlider>
+                  </motion.div>
                   ) : (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
