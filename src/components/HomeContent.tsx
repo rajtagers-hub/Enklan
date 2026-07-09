@@ -105,6 +105,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
   const [heroImageIndex, setHeroImageIndex] = useState(0);
 
   useEffect(() => {
+    // Scroll intersection logic
     let lastSection = "hero";
     const observer = new IntersectionObserver(
       (entries) => {
@@ -121,7 +122,15 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
     const sections = document.querySelectorAll("section[id]");
     sections.forEach((section) => observer.observe(section));
 
-    return () => observer.disconnect();
+    // Auto-slide logic
+    const interval = setInterval(() => {
+      setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(interval);
+    };
   }, [heroImages.length]);
 
   return (
@@ -326,12 +335,8 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                       {service.subsections.map((sub: any, idx: number) => {
                         const subImage = (sub.image && typeof sub.image === 'string' && sub.image.trim() !== "") ? sub.image : FALLBACK_IMAGE;
                         return (
-                          <motion.div
+                          <div
                             key={sub.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: idx * 0.1 }}
                             className="group flex flex-col shrink-0 w-[85vw] sm:w-[350px] md:w-[400px] snap-center md:snap-start bg-zinc-950 rounded-3xl overflow-hidden border border-white/5 hover:bg-zinc-900 transition-colors"
                           >
                             <div className="relative aspect-video w-full overflow-hidden">
@@ -350,7 +355,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                                 {sub.desc}
                               </p>
                             </div>
-                          </motion.div>
+                          </div>
                         );
                       })}
                     </AutoSlider>
