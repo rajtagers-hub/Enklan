@@ -136,7 +136,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled ? "header-solid py-4" : "header-transparent py-6 md:py-8"
       }`}>
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex items-center justify-between">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-10 flex items-center justify-between">
           <Logo className={isScrolled ? "scale-90" : ""} />
           
           <div className="hidden lg:flex items-center gap-10">
@@ -188,7 +188,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
         </div>
         
         {/* Hero Content */}
-        <div className="relative z-10 max-w-[1400px] mx-auto w-full px-6 md:px-10 mt-20">
+        <div className="relative z-10 max-w-[1400px] mx-auto w-full px-4 md:px-10 mt-16 md:mt-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -206,7 +206,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             <div className="flex items-center gap-6">
               <button 
                 onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
-                className="group flex items-center gap-4 px-8 py-4 rounded-full bg-white text-black text-xs font-semibold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors"
+                className="group flex items-center gap-4 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-white text-black text-xs font-semibold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors"
               >
                 Zbuloni Shërbimet
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -219,8 +219,8 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           ABOUT SECTION — Consolidated & Classic
          ════════════════════════════════════════════ */}
-      <section id="about" className="py-40 md:py-56 px-6 md:px-10">
-        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <section id="about" className="py-24 md:py-56 px-4 md:px-10">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-24 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -263,7 +263,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           SERVICES — Refined Grid
          ════════════════════════════════════════════ */}
-      <section id="services" className="py-32 md:py-48 px-6 md:px-10 bg-[#0a0a0a]">
+      <section id="services" className="py-20 md:py-48 px-4 md:px-10 bg-[#0a0a0a]">
         <div className="max-w-[1400px] mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -376,9 +376,9 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           STATS — Minimalist layout
          ════════════════════════════════════════════ */}
-      <section className="py-32 md:py-40 border-y border-white/5">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-8 md:divide-x divide-white/5">
+      <section className="py-16 md:py-40 border-y border-white/5">
+        <div className="max-w-[1400px] mx-auto px-4 md:px-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-4 md:gap-x-8 md:divide-x divide-white/5">
             {[
               { value: "100", suffix: "%", label: "Standard Sigurie" },
               { value: "24", suffix: "/7", label: "Monitorim Teknik" },
@@ -407,7 +407,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           PROJECTS — Static Grid
          ════════════════════════════════════════════ */}
-      <section id="projects" className="py-32 md:py-48 px-6 md:px-10 bg-[#0a0a0a] border-t border-white/5">
+      <section id="projects" className="py-20 md:py-48 px-4 md:px-10 bg-[#0a0a0a] border-t border-white/5">
         <div className="max-w-[1400px] mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
             <motion.div
@@ -477,7 +477,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           CONTACT CTA — Elegant
          ════════════════════════════════════════════ */}
-      <section id="contact" className="py-32 md:py-48 px-6 md:px-10 text-center relative border-y border-white/5">
+      <section id="contact" className="py-24 md:py-48 px-4 md:px-10 text-center relative border-y border-white/5">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -501,7 +501,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           FOOTER — Ultra Clean
          ════════════════════════════════════════════ */}
-      <footer className="bg-[#050505] pt-24 pb-12 px-6 md:px-10">
+      <footer className="bg-[#050505] pt-16 pb-8 px-4 md:px-10">
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 mb-24">
             
@@ -655,7 +655,7 @@ function AutoSlider({ children }: { children: React.ReactNode }) {
       `}} />
       <div 
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory -mx-6 px-6 md:mx-0 md:px-0 no-scrollbar scroll-smooth"
+        className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory -mx-4 px-4 md:mx-0 md:px-0 no-scrollbar scroll-smooth"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
         {children}

@@ -13,6 +13,15 @@ export const metadata: Metadata = {
   description: "Lider në fushën e inxhinierisë elektrike, paneleve diellore dhe smart home në Shqipëri. Zgjidhje moderne për infrastrukturë bashkëkohore.",
 };
 
+import { Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 import { CMSProvider } from "@/context/CMSContext";
 
 export default function RootLayout({

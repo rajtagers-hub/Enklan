@@ -65,7 +65,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl z-160 p-4 md:p-6"
           >
-            <div className="bg-zinc-900 border border-white/10 rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-12 relative overflow-hidden shadow-2xl">
+            <div className="bg-zinc-900 border border-white/10 rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-12 relative shadow-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
                <div className="galaxy-bg opacity-10 absolute inset-0 pointer-events-none" />
                
                <button 

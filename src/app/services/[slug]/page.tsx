@@ -39,8 +39,8 @@ export default function ServicePage() {
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
       
       {/* Header */}
-      <nav className="fixed top-0 left-0 right-0 h-24 flex items-center justify-between px-6 md:px-10 z-40 bg-black/80 md:bg-black/50 backdrop-blur-md border-b border-white/5">
-        <div className="flex items-center gap-6">
+      <nav className="fixed top-0 left-0 right-0 h-20 md:h-24 flex items-center justify-between px-4 md:px-10 z-40 bg-black/80 md:bg-black/50 backdrop-blur-md border-b border-white/5">
+        <div className="flex items-center gap-4 md:gap-6">
            <button 
              onClick={() => router.push("/")}
              className="p-2 md:p-3 hover:bg-white/5 rounded-xl transition-all border border-white/5 group flex items-center gap-2"
@@ -54,7 +54,7 @@ export default function ServicePage() {
            <SecretCoin />
            <button 
              onClick={() => setIsContactOpen(true)}
-             className="bg-white text-black px-4 md:px-6 py-2 md:py-2.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest hover:bg-blue-800 hover:text-white transition-all shadow-lg shadow-white/5"
+             className="bg-white text-black px-3 py-2 md:px-6 md:py-2.5 rounded-full text-[9px] md:text-xs font-black uppercase tracking-widest hover:bg-blue-800 hover:text-white transition-all shadow-lg shadow-white/5"
            >
              Na Kontaktoni
            </button>
@@ -62,7 +62,7 @@ export default function ServicePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 md:pt-40 pb-10 md:pb-20 px-6 md:px-10 max-w-6xl mx-auto">
+      <section className="pt-28 md:pt-40 pb-10 md:pb-20 px-4 md:px-10 max-w-6xl mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,7 +79,7 @@ export default function ServicePage() {
             </div>
           </div>
           <div className="space-y-4 md:space-y-6">
-            <h1 className="text-4xl md:text-7xl font-black italic uppercase tracking-tighter leading-none text-white px-2 md:px-0">
+            <h1 className="text-3xl sm:text-4xl md:text-7xl font-black italic uppercase tracking-tighter leading-none text-white px-2 md:px-0">
               {data.title}
             </h1>
             <p className="text-lg md:text-xl text-zinc-400 font-medium italic max-w-lg mx-auto md:mx-0">
@@ -90,7 +90,7 @@ export default function ServicePage() {
       </section>
 
       {/* Content Grid */}
-      <section className="pb-32 px-6 md:px-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20">
+      <section className="pb-20 md:pb-32 px-4 md:px-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -152,7 +152,7 @@ export default function ServicePage() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-zinc-950 border border-white/10 rounded-3xl max-w-2xl w-full overflow-hidden relative shadow-2xl"
+            className="bg-zinc-950 border border-white/10 rounded-3xl max-w-2xl w-full overflow-y-auto overflow-x-hidden relative shadow-2xl max-h-[90vh]"
           >
             <button 
               onClick={() => setActiveSubsection(null)}
@@ -185,7 +185,7 @@ export default function ServicePage() {
 
       {/* Related Projects Gallery */}
       {relatedProjects.length > 0 && (
-        <section className="py-20 px-10 max-w-6xl mx-auto border-t border-white/5">
+        <section className="py-16 px-4 md:px-10 max-w-6xl mx-auto border-t border-white/5">
            <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter mb-12 text-center">
               Projekte të Realizuara
            </h2>
@@ -208,7 +208,7 @@ export default function ServicePage() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-10 px-10 text-center bg-black">
+      <footer className="border-t border-white/5 py-8 px-4 md:px-10 text-center bg-black">
         <p className="text-[10px] font-black tracking-[0.5em] text-zinc-700">
           © 2026 ENKLAN SH.p.k - INXHINIERI DHE SIGURI ELEKTRIKE
         </p>

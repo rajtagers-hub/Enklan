@@ -41,9 +41,9 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 35, stiffness: 300 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-black/70 backdrop-blur-3xl border-l border-white/10 z-110 p-10 md:p-14 flex flex-col shadow-2xl"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-black/70 backdrop-blur-3xl border-l border-white/10 z-110 p-6 md:p-14 flex flex-col shadow-2xl overflow-y-auto"
           >
-            <div className="flex justify-between items-center mb-20">
+            <div className="flex justify-between items-center mb-12 md:mb-20">
               <Logo />
               <button 
                 onClick={onClose}
@@ -53,7 +53,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
               </button>
             </div>
 
-            <nav className="flex flex-col gap-8 flex-1 justify-center">
+            <nav className="flex flex-col gap-6 md:gap-8 flex-1 justify-center">
               {menuItems.map((item, i) => (
                 <motion.div
                   key={item.name}
@@ -65,7 +65,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                   <Link 
                     href={item.href}
                     onClick={onClose}
-                    className="relative text-4xl md:text-5xl font-medium tracking-tight text-white/40 hover:text-white transition-all duration-500 flex items-center"
+                    className="relative text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-white/40 hover:text-white transition-all duration-500 flex items-center"
                   >
                     <span className="absolute -left-12 text-xs font-semibold uppercase tracking-widest text-blue-500 opacity-0 group-hover:opacity-100 group-hover:-left-8 transition-all duration-500 hidden md:block">
                       0{i + 1}
