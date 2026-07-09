@@ -122,14 +122,8 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
     const sections = document.querySelectorAll("section[id]");
     sections.forEach((section) => observer.observe(section));
 
-    // Auto-slide logic
-    const interval = setInterval(() => {
-      setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-
     return () => {
       observer.disconnect();
-      clearInterval(interval);
     };
   }, [heroImages.length]);
 
@@ -178,7 +172,11 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       {/* ════════════════════════════════════════════
           HERO — Elegant Full-screen
          ════════════════════════════════════════════ */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
+      <section 
+        id="hero" 
+        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black cursor-pointer"
+        onClick={() => setHeroImageIndex((prev) => (prev + 1) % heroImages.length)}
+      >
         {/* Hero Background Image */}
         <div className="absolute inset-0">
           <AnimatePresence>
@@ -214,7 +212,10 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
             </h1>
             <div className="flex items-center gap-6">
               <button 
-                onClick={() => document.getElementById("services")?.scrollIntoView({ behavior: "smooth" })}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="group flex items-center gap-4 px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-white text-black text-xs font-semibold uppercase tracking-[0.2em] hover:bg-zinc-200 transition-colors"
               >
                 Zbuloni Shërbimet
@@ -294,40 +295,47 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
               const bgImage = getServiceImage(service);
               return (
                 <div key={service.slug} className="flex flex-col gap-12 md:gap-16">
-                  {/* Service Banner */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="relative w-full aspect-square sm:aspect-video lg:aspect-[21/9] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5"
-                  >
-                    <Image 
-                      src={bgImage} 
-                      alt={service.title}
-                      fill
-                      sizes="100vw"
-                      priority={index === 0}
-                      className="object-cover opacity-60"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                  {/* Service Banner Redesign - Split Layout */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                    {/* Left: Image */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8 }}
+                      className="relative w-full aspect-square sm:aspect-video lg:aspect-[4/3] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5"
+                    >
+                      <Image 
+                        src={bgImage} 
+                        alt={service.title}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        priority={index === 0}
+                        className="object-cover opacity-80"
+                      />
+                    </motion.div>
                     
-                    <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-end">
-                      <div className="max-w-4xl">
-                        <div className="text-sm font-semibold uppercase tracking-widest text-blue-500 mb-4">
-                          0{index + 1}
-                        </div>
-                        <h3 className="text-4xl md:text-6xl font-medium text-white mb-6 tracking-tight">{service.title}</h3>
-                        <p className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed">
-                          {service.desc}
-                        </p>
-                        <Link href={`/services/${service.slug}`} className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-white/20 text-[10px] font-semibold uppercase tracking-[0.2em] text-white hover:bg-white hover:text-black transition-all mt-8 w-fit">
-                          Lexo Më Shumë
-                          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                    {/* Right: Content */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8 }}
+                      className="flex flex-col justify-center"
+                    >
+                      <div className="text-sm font-semibold uppercase tracking-widest text-blue-500 mb-4 md:mb-6">
+                        0{index + 1}
                       </div>
-                    </div>
-                  </motion.div>
+                      <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium text-white mb-6 md:mb-8 tracking-tight">{service.title}</h3>
+                      <p className="text-base sm:text-lg md:text-xl text-zinc-400 font-light leading-relaxed">
+                        {service.desc}
+                      </p>
+                      <Link href={`/services/${service.slug}`} className="group inline-flex items-center gap-3 px-6 py-3 rounded-full border border-white/20 text-[10px] font-semibold uppercase tracking-[0.2em] text-white hover:bg-white hover:text-black transition-all mt-8 md:mt-10 w-fit">
+                        Lexo Më Shumë
+                        <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </motion.div>
+                  </div>
 
                   {/* Subcategories or Details */}
                   {service.subsections && service.subsections.length > 0 ? (
