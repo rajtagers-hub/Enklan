@@ -84,7 +84,36 @@ export const INITIAL_CONTENT = {
       icon: "Sun",
       desc: "Sisteme fotovoltaike të teknologjisë së fundit për kursim maksimal.",
       details: "Sistemet tona janë të projektuara për të përballuar kushtet klimatike të rajonit dhe për të maksimizuar prodhimin e energjisë. Investoni në të ardhmen me panelet tona.",
-      subsections: []
+      subsections: [
+        {
+          id: "sisteme-on-grid",
+          title: "Sisteme On-Grid",
+          desc: "Lidhje direkte me rrjetin për reduktim të faturës dhe shitje të energjisë.",
+          fullDesc: "Sistemet on-grid ju lejojnë të përdorni energjinë diellore gjatë ditës dhe të transferoni tepricat në rrjetin elektrik publik, duke siguruar përfitime maksimale financiare.",
+          image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          id: "sisteme-off-grid",
+          title: "Sisteme Off-Grid",
+          desc: "Autonomi e plotë me sisteme akumulimi (bateri) për çdo vendndodhje.",
+          fullDesc: "Zgjidhje ideale për zona të izoluara ose për pavarësi të plotë nga rrjeti. Përdorim teknologjinë më të fundit të baterive litium për jetëgjatësi maksimale.",
+          image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          id: "sisteme-hibride",
+          title: "Sisteme Hibride",
+          desc: "Ekuilibri perfekt midis kursimit të rrjetit dhe sigurisë së baterive.",
+          fullDesc: "Sistemet hibride funksionojnë të lidhura me rrjetin, por kanë edhe bateri rezervë. Në rast ndërprerjeje të energjisë nga rrjeti, sistemi kalon automatikisht në bateri.",
+          image: "https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          id: "mirembajtje-solare",
+          title: "Mirëmbajtje & Pastrim",
+          desc: "Shërbime profesionale për ruajtjen e efikasitetit maksimal të paneleve.",
+          fullDesc: "Inspektime termografike me dron, pastrim me pajisje të dedikuara dhe matje të efikasitetit për të garantuar që investimi juaj të prodhojë gjithmonë në maksimum.",
+          image: "https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=800"
+        }
+      ]
     },
     {
       slug: "smart-home",
@@ -92,7 +121,36 @@ export const INITIAL_CONTENT = {
       icon: "HomeIcon",
       desc: "Mjedise jetese të automatizuara të kontrolluara nga teknologjia inteligjente.",
       details: "Teknologjia jonë lejon integrimin e të gjitha pajisjeve në një platformë të vetme, duke sjellë kontrollin total të ambientit tuaj në majë të gishtave.",
-      subsections: []
+      subsections: [
+        {
+          id: "ndricim-inteligjent",
+          title: "Ndriçim Inteligjent",
+          desc: "Kontroll i plotë i dritave përmes zërit, sensorëve dhe skenave të personalizuara.",
+          fullDesc: "Krijoni atmosferën e duhur për çdo moment të ditës. Automatizoni fikjen e dritave kur largoheni dhe kontrolloni gjithçka nga telefoni juaj.",
+          image: "https://images.unsplash.com/photo-1558002038-1055907df827?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          id: "klimatizim-smart",
+          title: "Klimatizim & Ngrohje",
+          desc: "Menaxhim inteligjent i temperaturës për komoditet maksimal dhe kursim energjie.",
+          fullDesc: "Termostate inteligjente që mësojnë preferencat tuaja dhe rregullojnë temperaturën automatikisht bazuar në prezencën dhe parashikimin e motit.",
+          image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          id: "siguri-smart",
+          title: "Siguri & Sensorë",
+          desc: "Mbrojtje 24/7 me kamera inteligjente, sensorë lëvizjeje dhe njoftime në kohë reale.",
+          fullDesc: "Monitoroni shtëpinë tuaj nga kudo. Merrni njoftime të menjëhershme për rrjedhje uji, tym, ose lëvizje të dyshimta, dhe kontrolloni bravat inteligjente nga distanca.",
+          image: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          id: "audio-video-smart",
+          title: "Sisteme Audio & Video",
+          desc: "Argëtim i integruar dhe zërim multi-room me kontroll të centralizuar.",
+          fullDesc: "Shpërndani muzikën tuaj të preferuar në çdo dhomë të shtëpisë me sisteme zëri të padukshme dhe të integruara plotësisht me asistentët zanorë.",
+          image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&q=80&w=800"
+        }
+      ]
     }
   ],
   portfolio: [
@@ -100,6 +158,8 @@ export const INITIAL_CONTENT = {
       id: 1,
       title: "Residenca Solaris",
       category: "Panele Diellore",
+      categoryId: "panele-diellore",
+      subcategoryId: "sisteme-on-grid",
       image: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=800",
       description: "Instalimi i 150 paneleve diellore..."
     }

@@ -8,6 +8,8 @@ import Logo from "@/components/Logo";
 import { useState } from "react";
 import ContactModal from "@/components/ContactModal";
 import SecretCoin from "@/components/SecretCoin";
+import ProjectModal from "@/components/ProjectModal";
+import SubcategoryModal from "@/components/SubcategoryModal";
 import { useCMS } from "@/context/CMSContext";
 
 export default function ServicePage() {
@@ -19,6 +21,7 @@ export default function ServicePage() {
   const data = content.services.find((s: any) => s.slug === slug);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [activeSubsection, setActiveSubsection] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
 
   const relatedProjects = content.portfolio?.filter((p: any) => p.categoryId === slug) || [];
 
@@ -146,42 +149,20 @@ export default function ServicePage() {
         </motion.div>
       </section>
 
-      {/* Modal for Subsection Details */}
-      {activeSubsection && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-zinc-950 border border-white/10 rounded-3xl max-w-2xl w-full overflow-y-auto overflow-x-hidden relative shadow-2xl max-h-[90vh]"
-          >
-            <button 
-              onClick={() => setActiveSubsection(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-blue-800 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors"
-            >
-              x
-            </button>
-            <div className="h-64 relative">
-              <Image src={activeSubsection.image} alt={activeSubsection.title} fill sizes="(max-width: 768px) 100vw, 800px" className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent" />
-            </div>
-            <div className="p-8 space-y-4">
-              <h3 className="text-3xl font-black italic uppercase tracking-tighter">{activeSubsection.title}</h3>
-              <p className="text-zinc-400 leading-relaxed text-sm">
-                {activeSubsection.fullDesc}
-              </p>
-              <button 
-                onClick={() => {
-                  setActiveSubsection(null);
-                  setIsContactOpen(true);
-                }}
-                className="mt-6 w-full bg-white text-black py-4 rounded-xl font-bold uppercase tracking-widest hover:bg-blue-800 hover:text-white transition-colors"
-              >
-                Kërko Konsulencë
-              </button>
-            </div>
-          </motion.div>
-        </div>
-      )}
+      {/* Modals */}
+      <ProjectModal 
+        isOpen={!!selectedProject} 
+        onClose={() => setSelectedProject(null)} 
+        project={selectedProject} 
+      />
+      <SubcategoryModal 
+        isOpen={!!activeSubsection} 
+        onClose={() => setActiveSubsection(null)} 
+        subcategory={activeSubsection} 
+        onContactClick={() => setIsContactOpen(true)} 
+        relatedProjects={activeSubsection ? (content.portfolio?.filter((p: any) => p.subcategoryId === activeSubsection.id) || []) : []}
+        onProjectClick={(project) => setSelectedProject(project)}
+      />
 
       {/* Related Projects Gallery */}
       {relatedProjects.length > 0 && (

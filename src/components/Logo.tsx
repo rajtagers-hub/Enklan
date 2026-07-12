@@ -34,11 +34,11 @@ export default function Logo({ className = "", showText = true }: { className?: 
         <motion.path 
           d="M 10 60 C 10 95, 90 95, 90 60 C 90 25, 10 25, 10 60" 
           stroke="url(#swoosh-grad)" 
-          strokeWidth="4" 
+          strokeWidth={4} 
           strokeLinecap="round"
           fill="none"
           variants={{ 
-            initial: { pathLength: 0.4, pathOffset: 0, opacity: 0.8 },
+            initial: { pathLength: 0.4, pathOffset: 0, opacity: 0.8, strokeWidth: 4 },
             hover: { 
               pathLength: 1, 
               pathOffset: 1,
@@ -52,7 +52,7 @@ export default function Logo({ className = "", showText = true }: { className?: 
         <motion.path 
           d="M 10 60 C 10 95, 90 95, 90 60 C 90 25, 10 25, 10 60" 
           stroke="url(#swoosh-grad)" 
-          strokeWidth="10" 
+          strokeWidth={10} 
           strokeLinecap="round" 
           fill="none"
           className="blur-sm"

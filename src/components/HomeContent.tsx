@@ -12,6 +12,7 @@ import Logo from "./Logo";
 import SideMenu from "./SideMenu";
 import ContactModal from "./ContactModal";
 import ProjectModal from "./ProjectModal";
+import SubcategoryModal from "./SubcategoryModal";
 import SecretCoin from "./SecretCoin";
 import { useCMS } from "@/context/CMSContext";
 import Link from "next/link";
@@ -83,6 +84,7 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<any>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeCard, setActiveCard] = useState(0);
 
@@ -105,25 +107,20 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
   const [heroImageIndex, setHeroImageIndex] = useState(0);
 
   useEffect(() => {
-    // Scroll intersection logic
-    let lastSection = "hero";
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.target.id && entry.target.id !== lastSection) {
-            lastSection = entry.target.id;
-            setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    let lastScrollY = window.scrollY;
+    const scrollThreshold = 400; // Change image every 400px of scrolling
 
-    const sections = document.querySelectorAll("section[id]");
-    sections.forEach((section) => observer.observe(section));
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (Math.abs(currentScrollY - lastScrollY) >= scrollThreshold) {
+        setHeroImageIndex((prev) => (prev + 1) % heroImages.length);
+        lastScrollY = currentScrollY;
+      }
+    };
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
     };
   }, [heroImages.length]);
 
@@ -132,6 +129,14 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
       <SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <ContactModal isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
       <ProjectModal isOpen={!!selectedProject} onClose={() => setSelectedProject(null)} project={selectedProject} />
+      <SubcategoryModal 
+        isOpen={!!selectedSubcategory} 
+        onClose={() => setSelectedSubcategory(null)} 
+        subcategory={selectedSubcategory} 
+        onContactClick={() => setIsContactOpen(true)} 
+        relatedProjects={selectedSubcategory ? (content.portfolio?.filter((p: any) => p.subcategoryId === selectedSubcategory.id) || []) : []}
+        onProjectClick={(project) => setSelectedProject(project)}
+      />
 
       {/* ════════════════════════════════════════════
           HEADER — Transparent → Sticky on scroll
@@ -297,13 +302,15 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                 <div key={service.slug} className="flex flex-col gap-12 md:gap-16">
                   {/* Service Banner Redesign - Split Layout */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-                    {/* Left: Image */}
+                    {/* Image Container (alternates on desktop) */}
                     <motion.div
-                      initial={{ opacity: 0, x: -30 }}
+                      initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8 }}
-                      className="relative w-full aspect-square sm:aspect-video lg:aspect-[4/3] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5"
+                      className={`relative w-full aspect-square sm:aspect-video lg:aspect-[4/3] rounded-[2rem] overflow-hidden bg-zinc-900 border border-white/5 ${
+                        index % 2 === 1 ? "lg:order-2" : ""
+                      }`}
                     >
                       <Image 
                         src={bgImage} 
@@ -315,13 +322,15 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                       />
                     </motion.div>
                     
-                    {/* Right: Content */}
+                    {/* Content Container (alternates on desktop) */}
                     <motion.div
-                      initial={{ opacity: 0, x: 30 }}
+                      initial={{ opacity: 0, x: index % 2 === 0 ? 30 : -30 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8 }}
-                      className="flex flex-col justify-center"
+                      className={`flex flex-col justify-center ${
+                        index % 2 === 1 ? "lg:order-1" : ""
+                      }`}
                     >
                       <div className="text-sm font-semibold uppercase tracking-widest text-blue-500 mb-4 md:mb-6">
                         0{index + 1}
@@ -349,7 +358,8 @@ export default function HomeContent({ initialData }: { initialData?: any }) {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "0px 2000px" }}
                             transition={{ delay: idx * 0.1 }}
-                            className="group flex flex-col shrink-0 w-[85vw] sm:w-[350px] md:w-[400px] snap-center md:snap-start bg-zinc-950 rounded-3xl overflow-hidden border border-white/5 hover:bg-zinc-900 transition-colors"
+                            className="group flex flex-col shrink-0 w-[85vw] sm:w-[350px] md:w-[400px] snap-center md:snap-start bg-zinc-950 rounded-3xl overflow-hidden border border-white/5 hover:bg-zinc-900 transition-colors cursor-pointer"
+                            onClick={() => setSelectedSubcategory(sub)}
                           >
                             <div className="relative aspect-video w-full overflow-hidden">
                               <Image 

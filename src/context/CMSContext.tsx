@@ -16,6 +16,24 @@ const CMSContext = createContext<CMSContextValue | null>(null);
 export function CMSProvider({ children }: { children: React.ReactNode }) {
   const [content, setContent] = useState(INITIAL_CONTENT);
 
+  const mergeMissingSubsections = (data: any) => {
+    if (!data || !Array.isArray(data.services)) return data;
+    const mergedServices = data.services.map((service: any) => {
+      const initialService = INITIAL_CONTENT.services.find((s: any) => s.slug === service.slug);
+      if (initialService && (!service.subsections || service.subsections.length === 0)) {
+        return {
+          ...service,
+          subsections: initialService.subsections
+        };
+      }
+      return service;
+    });
+    return {
+      ...data,
+      services: mergedServices
+    };
+  };
+
   useEffect(() => {
     const initCMS = async () => {
       try {
@@ -24,7 +42,7 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
         
         if (result.exists && result.data) {
           // Central DB has data — use it as the single source of truth
-          setContent(result.data);
+          setContent(mergeMissingSubsections(result.data));
         }
         // If central DB is empty, we just keep INITIAL_CONTENT.
         // The admin can use forceSyncFromLocal() to push their local data.
@@ -34,7 +52,7 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
         const savedContent = localStorage.getItem('enklan_cms_content');
         if (savedContent) {
           try {
-            setContent(JSON.parse(savedContent));
+            setContent(mergeMissingSubsections(JSON.parse(savedContent)));
           } catch (e) {
             console.error('Failed to parse local content:', e);
           }
